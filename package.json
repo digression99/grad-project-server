@@ -1,0 +1,8 @@
+{
+  "name": "grad-project-server",
+  "version": "1.0.0",
+  "description": "Graduation Project Serverside",
+  "main": "index.js",
+  "author": "Kim Ilsik",
+  "license": "MIT"
+}
