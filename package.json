@@ -4,5 +4,19 @@
   "description": "Graduation Project Serverside",
   "main": "index.js",
   "author": "Kim Ilsik",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "dev-server": "node ./bin/www"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.205.0",
+    "body-parser": "^1.18.2",
+    "chalk": "^2.3.1",
+    "compression": "^1.7.2",
+    "dotenv": "^5.0.1",
+    "errorhandler": "^1.5.0",
+    "express": "^4.16.2",
+    "mongoose": "^5.0.7",
+    "morgan": "^1.9.0"
+  }
 }
