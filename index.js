@@ -8,7 +8,7 @@ const compression = require('compression');
 const errorHandler = require('errorhandler');
 
 // environment load
-dotenv.load({path : '.env'});
+dotenv.load({path : '.env.development'});
 
 // custom include
 
@@ -24,12 +24,13 @@ const api = require('./api/index');
 // app setting
 const app = express();
 // middleware.
-app.use(bodyParser.json());
+app.use(bodyParser.json({
+    limit : '50mb'
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
 app.use(compression());
 if (app.get('env') === 'development') app.use(errorHandler());
-
 app.use(api);
 
 // universal router

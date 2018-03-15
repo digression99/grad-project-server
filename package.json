@@ -6,17 +6,26 @@
   "author": "Kim Ilsik",
   "license": "MIT",
   "scripts": {
-    "dev-server": "node ./bin/www"
+    "dev-server": "node ./bin/www",
+    "test" : "mocha tests/**/*.test.js"
   },
   "dependencies": {
     "aws-sdk": "^2.205.0",
+    "base-64": "^0.1.0",
     "body-parser": "^1.18.2",
     "chalk": "^2.3.1",
     "compression": "^1.7.2",
     "dotenv": "^5.0.1",
     "errorhandler": "^1.5.0",
+    "expect": "^22.4.0",
     "express": "^4.16.2",
+    "firebase": "^4.10.1",
+    "mocha": "^5.0.4",
     "mongoose": "^5.0.7",
-    "morgan": "^1.9.0"
+    "morgan": "^1.9.0",
+    "node-base64-image": "^1.0.4",
+    "pify": "^3.0.0",
+    "supertest": "^3.0.0",
+    "uuid": "^3.2.1"
   }
 }

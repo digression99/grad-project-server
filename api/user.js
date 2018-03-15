@@ -11,5 +11,12 @@ user.post('/register', userCtrl.registerUser);
 user.post('/get-faces', userCtrl.getFaces);
 user.post('/face-register', userCtrl.faceRegister);
 user.post('/face-detect', userCtrl.faceDetect);
+user.post('/profile', userCtrl.getProfile);
+
+// no get request from server.
+// user.get('/profile', userCtrl.getProfile);
+
+// test functions
+// user.get('/');
 
 module.exports = user;
