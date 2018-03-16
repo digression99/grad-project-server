@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7be2f7dd-cb8f-479b-8a87-50af9b9e428b" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/lib/deleteUserCollection.js" />
-      <change beforePath="$PROJECT_DIR$/.env.development" afterPath="$PROJECT_DIR$/.env.development" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/api/user.ctrl.js" afterPath="$PROJECT_DIR$/api/user.ctrl.js" />
-      <change beforePath="$PROJECT_DIR$/lib/index.js" afterPath="$PROJECT_DIR$/lib/index.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -365,12 +360,12 @@
       <workItem from="1520920546935" duration="6544000" />
       <workItem from="1520937809583" duration="2372000" />
       <workItem from="1521087972180" duration="4126000" />
-      <workItem from="1521157241605" duration="584000" />
+      <workItem from="1521157241605" duration="647000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="52817000" />
+    <option name="totallyTimeSpent" value="52880000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="720" height="778" extended-state="0" />
