@@ -6,7 +6,7 @@ const {
     saveImageToS3,
     recognizeFaceInBlacklist,
     constants,
-    testFunc
+    // testFunc
 } = require('../lib/index');
 
 exports.registerUser = async (req, res) => {
@@ -44,14 +44,13 @@ exports.faceRegister = async (req, res) => {
     console.log('face register entered.');
     console.log("email is : ", email);
     console.log("constant : ", constants.TEST);
-    testFunc();
 
     try {
         // should create collection first.
         // username 찾기.
         const splitted = email.split('@');
 
-        const result = await createRekognitionCollection(splitted[0]);
+        await createRekognitionCollection(splitted[0]);
         // console.log();
         console.log('collection created.');
 

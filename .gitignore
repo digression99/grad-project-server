@@ -1,6 +1,5 @@
 node_modules
-.env
-.env.develpment
+.env.*
 .idea
 playground
 tests
