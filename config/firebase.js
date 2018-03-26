@@ -1,4 +1,3 @@
-
 const firebase = require('firebase');
 
 // import * as firebase from 'firebase';
@@ -13,14 +12,12 @@ const config = {
 };
 
 firebase.initializeApp(config);
-// firebase.database.ref();
 
 // firebase.auth
 
 // const database = firebase.database();
 // const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 
-export {
-    firebase
-    // firebase, googleAuthProvider, database as default
-};
+console.log('firebase connected');
+
+module.exports = firebase;

@@ -12,9 +12,7 @@ user.post('/get-faces', userCtrl.getFaces);
 user.post('/face-register', userCtrl.faceRegister);
 user.post('/face-detect', userCtrl.faceDetect);
 user.post('/profile', userCtrl.getProfile);
-
-// no get request from server.
-// user.get('/profile', userCtrl.getProfile);
+user.post('/emergency', userCtrl.handleEmergency);
 
 // test functions
 // user.get('/');

@@ -5,8 +5,7 @@ const {
     saveImageToCollection,
     saveImageToS3,
     recognizeFaceInBlacklist,
-    constants,
-    // testFunc
+    makeGeoQuery
 } = require('../lib/index');
 
 exports.registerUser = async (req, res) => {
@@ -43,7 +42,8 @@ exports.faceRegister = async (req, res) => {
 
     console.log('face register entered.');
     console.log("email is : ", email);
-    console.log("constant : ", constants.TEST);
+    // console.log("constant : ", constants.TEST);
+    let uuidArr = [];
 
     try {
         // should create collection first.
@@ -66,10 +66,13 @@ exports.faceRegister = async (req, res) => {
             // if upload is finished, use save image to collection to designated
             const saveCollectionResult = await saveImageToCollection(splitted[0], designation, decoded);
             console.log('collection save result : ', saveCollectionResult);
+
+            uuidArr.push(S3SaveResult.uuid);
         }
 
         res.status(200).json({
-            message : "faceRegister complete."
+            message : "faceRegister complete.",
+            uuidArr
         });
     } catch (e) {
         console.log('error occured.');
@@ -140,12 +143,20 @@ exports.getProfile = async (req, res) => {
     }
 };
 
-exports.handleEmergency = (req, res) => {
-    // email
-    // locations
-        // loc 1
-        // loc 2
+exports.handleEmergency = async (req, res) => {
 
+    // get data from req body.
+    const {email, location} = req.body;
+
+    const resString = email.replace(/[.@]/g, '-');
+    console.log("res :", resString);
+
+    console.log('handle emergency.');
+    console.log('email is : ', email);
+
+    // make query. this to library func.
+    await makeGeoQuery(resString, location);
+    // console.log("query : ", query);
 
     res.status(200).json({
         message : "handle emergency"
