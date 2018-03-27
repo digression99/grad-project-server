@@ -7,6 +7,12 @@ const chalk = require('chalk');
 const compression = require('compression');
 const errorHandler = require('errorhandler');
 
+// aws library
+const {
+    createBlacklistCollection,
+    rekognitionListCollections
+} = require('./lib/index');
+
 // environment load
 dotenv.load({path : '.env.development'});
 
@@ -32,16 +38,35 @@ app.use(logger('dev'));
 app.use(compression());
 if (app.get('env') === 'development') app.use(errorHandler());
 app.use(api);
-
-// universal router
-app.get('*', (req, res) => {
-    res.send('index.html');
-});
-
-app.listen(app.get('port'), () => {
-    console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
-    console.log('  Press CTRL-C to stop\n');
-});
+//
+// (new Promise(async (resolve, reject) => {
+//     try {
+//         // create blacklist collection
+//         const result = await rekognitionListCollections();
+//         // search blacklist collection
+//         const isBlacklistMade = result.includes("blacklist-collection");
+//
+//         if (!isBlacklistMade) {
+//             await createBlacklistCollection();
+//         }
+//         resolve();
+//     } catch (e) {
+//         reject(e);
+//         // throw new Error(e);
+//     }
+// }))()
+//     .then(() => {
+//         // universal router
+//         app.get('*', (req, res) => {
+//             res.send('index.html');
+//         });
+//
+//         app.listen(app.get('port'), () => {
+//             console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
+//             console.log('  Press CTRL-C to stop\n');
+//         });
+//     })
+//     .catch(e => console.log(e));
 
 module.exports = app;
 

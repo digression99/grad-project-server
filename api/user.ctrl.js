@@ -48,9 +48,9 @@ exports.faceRegister = async (req, res) => {
     try {
         // should create collection first.
         // username 찾기.
-        const splitted = email.split('@');
+        const replaced = email.replace(/[@.]/g, '-');
 
-        await createRekognitionCollection(splitted[0]);
+        await createRekognitionCollection(replaced);
         // console.log();
         console.log('collection created.');
 
@@ -64,7 +64,7 @@ exports.faceRegister = async (req, res) => {
             const S3SaveResult = await saveImageToS3(email, designation, decoded);
             console.log('s3 save result : ', S3SaveResult);
             // if upload is finished, use save image to collection to designated
-            const saveCollectionResult = await saveImageToCollection(splitted[0], designation, decoded);
+            const saveCollectionResult = await saveImageToCollection(replaced, designation, decoded);
             console.log('collection save result : ', saveCollectionResult);
 
             uuidArr.push(S3SaveResult.uuid);
@@ -85,7 +85,7 @@ exports.faceRegister = async (req, res) => {
 
 exports.faceDetect = async (req, res) => {
     const {email, img} = req.body;
-    const splitted = email.split("@");
+    const replaced = email.replace(/[@.]/g, '-');
     console.log('face detect entered.');
 
     try {
@@ -93,7 +93,7 @@ exports.faceDetect = async (req, res) => {
         console.log('before decoded.');
 
         const decoded = new Buffer.from(img, 'base64');
-        const result = await recognizeFace(splitted[0], decoded);
+        const result = await recognizeFace(replaced, decoded);
 
         console.log('recognize face success.');
 
