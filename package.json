@@ -22,6 +22,7 @@
     "firebase": "^4.10.1",
     "geofire": "^4.1.2",
     "mocha": "^5.0.4",
+    "moment": "^2.21.0",
     "mongoose": "^5.0.7",
     "morgan": "^1.9.0",
     "node-base64-image": "^1.0.4",

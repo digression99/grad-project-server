@@ -46,9 +46,6 @@ exports.faceRegister = async (req, res) => {
     console.log('face register entered.');
     console.log("email is : ", email);
 
-    // don't need to put uuid array here.
-    // uuid array is send to server from mobile or iot device.
-
     try {
         // create rekognition collection.
         // save image to collection with proper designation.
@@ -56,7 +53,7 @@ exports.faceRegister = async (req, res) => {
 
         // const replaced = email.replace(/[@.]/g, '-');
 
-        await createRekognitionCollection(email);
+        await createRekognitionCollection(email, designation);
 
         for (let uuid of uuidArr) {
             const saveCollectionResult = await saveImageToCollectionWithS3(email, designation, uuid);
@@ -64,97 +61,122 @@ exports.faceRegister = async (req, res) => {
             // if data has returned, you need to save it to database.
             // save faceIds, imageIds.
 
+            // saveCollectionData.
+
             console.log(`${uuid} is saved to collection`);
             console.log(saveCollectionResult);
         }
-
-
-
-
-
+        console.log('face register succeed.');
+        res.status(200).json({
+            message : "succeed."
+        });
+    } catch (e) {
+        console.log('error occured in face register.');
+        console.log(e);
+        res.status(400).json({
+            message : "error occured.",
+            error : e
+        });
     }
 
+    //
+    // try {
+    //     // should create collection first.
+    //     // username 찾기.
+    //     const replaced = email.replace(/[@.]/g, '-');
+    //
+    //     await createRekognitionCollection(replaced);
+    //     // console.log();
+    //     console.log('collection created.');
+    //
+    //     // can this be ok with several images?
+    //     for (let img of faceData) {
+    //         // first, should change base64 to normal image.
+    //         // but, don't do the business logic in here, just send base64 image to function.
+    //         // or not.
+    //         const decoded = new Buffer.from(img, 'base64');
+    //         // upload image to S3.
+    //         const S3SaveResult = await saveImageToS3(email, designation, decoded);
+    //         console.log('s3 save result : ', S3SaveResult);
+    //
+    //
+    //         // if upload is finished, use save image to collection to designated
+    //         const saveCollectionResult = await saveImageToCollection(replaced, designation, decoded);
+    //         console.log('collection save result : ', saveCollectionResult);
+    //
+    //         uuidArr.push(S3SaveResult.uuid);
+    //     }
+    //
+    //     res.status(200).json({
+    //         message : "faceRegister complete.",
+    //         uuidArr
+    //     });
+    // } catch (e) {
+    //     console.log('error occured.');
+    //     console.log(e);
+    //     res.status(400).json({
+    //         error : e
+    //     });
+    // }
+};
 
-    let uuidArr = [];
+exports.faceDetect = async (req, res) => {
+    // const {email, img} = req.body;
+    const {email, uuid} = req.body;
+
+    // const replaced = email.replace(/[@.]/g, '-');
+    console.log('face detect entered.');
 
     try {
-        // should create collection first.
-        // username 찾기.
-        const replaced = email.replace(/[@.]/g, '-');
-
-        await createRekognitionCollection(replaced);
-        // console.log();
-        console.log('collection created.');
-
-        // can this be ok with several images?
-        for (let img of faceData) {
-            // first, should change base64 to normal image.
-            // but, don't do the business logic in here, just send base64 image to function.
-            // or not.
-            const decoded = new Buffer.from(img, 'base64');
-            // upload image to S3.
-            const S3SaveResult = await saveImageToS3(email, designation, decoded);
-            console.log('s3 save result : ', S3SaveResult);
-
-
-            // if upload is finished, use save image to collection to designated
-            const saveCollectionResult = await saveImageToCollection(replaced, designation, decoded);
-            console.log('collection save result : ', saveCollectionResult);
-
-            uuidArr.push(S3SaveResult.uuid);
-        }
-
+        const result = await recognizeFace(email, uuid);
         res.status(200).json({
-            message : "faceRegister complete.",
-            uuidArr
+            message : result,
         });
+
     } catch (e) {
         console.log('error occured.');
         console.log(e);
         res.status(400).json({
+            message : "error ocured.",
             error : e
         });
     }
-};
 
-exports.faceDetect = async (req, res) => {
-    const {email, img} = req.body;
-    const replaced = email.replace(/[@.]/g, '-');
-    console.log('face detect entered.');
-
-    try {
-        // get image from the buffer.
-        console.log('before decoded.');
-
-        const decoded = new Buffer.from(img, 'base64');
-        const result = await recognizeFace(replaced, decoded);
-
-        console.log('recognize face success.');
-
-        if (result === 'unknown') {
-            // should use different function.
-            const blackListResult = await recognizeFaceInBlacklist(decoded);
-
-
-            if (blackListResult === 'unknown') {
-                res.status(200).json({
-                    message : "stranger"
-                });
-            } else {
-                res.status(200).json({
-                    message : "blacklist"
-                });
-            }
-        }
-        res.status(200).json({
-            message : result
-        });
-    } catch (e) {
-        console.log(e);
-        res.status(400).json({
-            error : e
-        });
-    }
+    //
+    //
+    // try {
+    //     // get image from the buffer.
+    //     console.log('before decoded.');
+    //
+    //     const decoded = new Buffer.from(img, 'base64');
+    //     const result = await recognizeFace(replaced, decoded);
+    //
+    //     console.log('recognize face success.');
+    //
+    //     if (result === 'unknown') {
+    //         // should use different function.
+    //         const blackListResult = await recognizeFaceInBlacklist(decoded);
+    //
+    //
+    //         if (blackListResult === 'unknown') {
+    //             res.status(200).json({
+    //                 message : "stranger"
+    //             });
+    //         } else {
+    //             res.status(200).json({
+    //                 message : "blacklist"
+    //             });
+    //         }
+    //     }
+    //     res.status(200).json({
+    //         message : result
+    //     });
+    // } catch (e) {
+    //     console.log(e);
+    //     res.status(400).json({
+    //         error : e
+    //     });
+    // }
 };
 
 exports.getProfile = async (req, res) => {
