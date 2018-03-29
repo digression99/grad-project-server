@@ -6,6 +6,7 @@
   "author": "Kim Ilsik",
   "license": "MIT",
   "scripts": {
+    "start" : "yarn run dev-server",
     "dev-server": "node ./bin/www",
     "test": "mocha tests/**/*.test.js"
   },
