@@ -7,6 +7,7 @@
 var app = require('../index');
 var debug = require('debug')('grad-project-server:server');
 var http = require('http');
+const chalk = require('chalk');
 
 /**
  * Get port from environment and store in Express.
@@ -82,6 +83,8 @@ function onError(error) {
  */
 
 function onListening() {
+    console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
+    console.log('  Press CTRL-C to stop\n');
     var addr = server.address();
     var bind = typeof addr === 'string'
         ? 'pipe ' + addr

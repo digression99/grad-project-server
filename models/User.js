@@ -1,6 +1,5 @@
 const mongoose = require('../config/mongoose');
-
-// mongoose.Schema
+const moment = require('moment');
 
 const UserSchema = new mongoose.Schema({
     email : {
@@ -12,15 +11,21 @@ const UserSchema = new mongoose.Schema({
         required : true
     },
     S3 : [{
-        key : String, // image key.
+        key : String, // image key. uuid.
         timestamp : Number
     }],
     // not using it now.
     // you know the collection id. it's email.
-    rekognition : [{
+    rekognition : [{ // for deletion.
         faceId : String,
         imageIds : [String]
-    }]
+    }],
+    mobile : {
+        token : String
+    },
+    device : {
+        id : String,
+    }
 });
 
 UserSchema.statics.findByEmail = async function (email) {
@@ -32,6 +37,25 @@ UserSchema.statics.findByEmail = async function (email) {
     //     resolve(user);
     // })
     //     .catch(err => reject(err));
+};
+
+UserSchema.statics.saveS3ImageData = async function (email, uuid, designation) {
+    const User = this;
+    const timestamp = moment(); // here, you check the time stamp and save it.
+    const replaced = email.replace(/[@.]/g, '-');
+    const key = `${replaced}-${designation}-${uuid}`;
+
+    try {
+        const user = await User.findOne({email});
+        await user.S3.push({
+            key,
+            timestamp
+        });
+    } catch (e) {
+        console.log('error occured in save s3 image data');
+        console.log(e);
+        throw new Error(e);
+    }
 };
 
 UserSchema.statics.findByEmailAndUpdateS3 = async function (body) {

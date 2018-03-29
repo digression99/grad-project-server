@@ -6,6 +6,10 @@ const path = require('path');
 const chalk = require('chalk');
 const compression = require('compression');
 const errorHandler = require('errorhandler');
+// environment load
+dotenv.load({path : '.env.development'});
+// app setting
+const app = express();
 
 // aws library
 const {
@@ -13,22 +17,16 @@ const {
     rekognitionListCollections
 } = require('./lib/index');
 
-// environment load
-dotenv.load({path : '.env.development'});
-
-// custom include
-
 // database setting
 require('./config/mongoose');
 
 // amazon web service setting
 require('./config/aws');
 
+// need to include firebase.
+
 // include api
 const api = require('./api/index');
-
-// app setting
-const app = express();
 // middleware.
 app.use(bodyParser.json({
     limit : '50mb'
@@ -38,35 +36,47 @@ app.use(logger('dev'));
 app.use(compression());
 if (app.get('env') === 'development') app.use(errorHandler());
 app.use(api);
-//
-// (new Promise(async (resolve, reject) => {
-//     try {
-//         // create blacklist collection
-//         const result = await rekognitionListCollections();
-//         // search blacklist collection
-//         const isBlacklistMade = result.includes("blacklist-collection");
-//
-//         if (!isBlacklistMade) {
-//             await createBlacklistCollection();
-//         }
-//         resolve();
-//     } catch (e) {
-//         reject(e);
-//         // throw new Error(e);
-//     }
-// }))()
-//     .then(() => {
-//         // universal router
-//         app.get('*', (req, res) => {
-//             res.send('index.html');
-//         });
-//
-//         app.listen(app.get('port'), () => {
-//             console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
-//             console.log('  Press CTRL-C to stop\n');
-//         });
-//     })
-//     .catch(e => console.log(e));
+
+// universal router
+app.get('*', (req, res) => {
+    res.send('index.html');
+});
+
+(() => new Promise(async (resolve, reject) => {
+    try {
+        // console.log(process.env.AWS_REGION);
+
+        // create blacklist collection
+        const result = await rekognitionListCollections();
+        console.log('list collections : ');
+        console.log(result);
+        // search blacklist collection
+        const isBlacklistMade = result.includes("blacklist-collection");
+
+        if (!isBlacklistMade) {
+            await createBlacklistCollection();
+        }
+        console.log('blacklist collection created.');
+        resolve();
+    } catch (e) {
+        reject(e);
+        // throw new Error(e);
+    }
+}))()
+    .then(() => {
+        console.log('app starting.');
+        // app.listen(app.get('port'), () => {
+        //     console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
+        //     console.log('  Press CTRL-C to stop\n');
+        // });
+    })
+    .catch(e => console.log(e));
+
+process.on('uncaughtException', (e) => {
+    console.log('error occured.');
+    console.log(e);
+    process.exit(0);
+});
 
 module.exports = app;
 

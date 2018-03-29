@@ -5,7 +5,8 @@ const {
     saveImageToCollection,
     saveImageToS3,
     recognizeFaceInBlacklist,
-    makeGeoQuery
+    makeGeoQuery,
+    saveImageToCollectionWithS3
 } = require('../lib/index');
 
 exports.registerUser = async (req, res) => {
@@ -37,12 +38,43 @@ exports.getFaces = (req, res) => {
 };
 
 exports.faceRegister = async (req, res) => {
-    const {email, designation, faceData} = req.body;
+    // const {email, designation, faceData} = req.body;
     // face data is images, base64.
+
+    const {email, designation, uuidArr} = req.body;
 
     console.log('face register entered.');
     console.log("email is : ", email);
-    // console.log("constant : ", constants.TEST);
+
+    // don't need to put uuid array here.
+    // uuid array is send to server from mobile or iot device.
+
+    try {
+        // create rekognition collection.
+        // save image to collection with proper designation.
+        // send the result to device.
+
+        // const replaced = email.replace(/[@.]/g, '-');
+
+        await createRekognitionCollection(email);
+
+        for (let uuid of uuidArr) {
+            const saveCollectionResult = await saveImageToCollectionWithS3(email, designation, uuid);
+
+            // if data has returned, you need to save it to database.
+            // save faceIds, imageIds.
+
+            console.log(`${uuid} is saved to collection`);
+            console.log(saveCollectionResult);
+        }
+
+
+
+
+
+    }
+
+
     let uuidArr = [];
 
     try {
@@ -63,6 +95,8 @@ exports.faceRegister = async (req, res) => {
             // upload image to S3.
             const S3SaveResult = await saveImageToS3(email, designation, decoded);
             console.log('s3 save result : ', S3SaveResult);
+
+
             // if upload is finished, use save image to collection to designated
             const saveCollectionResult = await saveImageToCollection(replaced, designation, decoded);
             console.log('collection save result : ', saveCollectionResult);
