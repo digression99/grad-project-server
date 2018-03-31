@@ -53,7 +53,7 @@ exports.faceRegister = async (req, res) => {
 
         // const replaced = email.replace(/[@.]/g, '-');
 
-        await createRekognitionCollection(email, designation);
+        await createRekognitionCollection(email);
 
         for (let uuid of uuidArr) {
             const saveCollectionResult = await saveImageToCollectionWithS3(email, designation, uuid);
