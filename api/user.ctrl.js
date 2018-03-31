@@ -122,13 +122,13 @@ exports.faceRegister = async (req, res) => {
 
 exports.faceDetect = async (req, res) => {
     // const {email, img} = req.body;
-    const {email, uuid} = req.body;
+    const {email, designation, uuid} = req.body;
 
     // const replaced = email.replace(/[@.]/g, '-');
     console.log('face detect entered.');
 
     try {
-        const result = await recognizeFace(email, uuid);
+        const result = await recognizeFace(email, designation, uuid);
         res.status(200).json({
             message : result,
         });
@@ -137,7 +137,7 @@ exports.faceDetect = async (req, res) => {
         console.log('error occured.');
         console.log(e);
         res.status(400).json({
-            message : "error ocured.",
+            message : "error occured.",
             error : e
         });
     }
