@@ -41,7 +41,7 @@ exports.faceRegister = async (req, res) => {
     // const {email, designation, faceData} = req.body;
     // face data is images, base64.
 
-    const {email, designation, uuidArr} = req.body;
+    const {email, designation, uuid} = req.body;
 
     console.log('face register entered.');
     console.log("email is : ", email);
@@ -55,15 +55,15 @@ exports.faceRegister = async (req, res) => {
 
         await createRekognitionCollection(email);
 
-        for (let uuid of uuidArr) {
-            const saveCollectionResult = await saveImageToCollectionWithS3(email, designation, uuid);
+        for (let id of uuid) {
+            const saveCollectionResult = await saveImageToCollectionWithS3(email, designation, id);
 
             // if data has returned, you need to save it to database.
             // save faceIds, imageIds.
 
             // saveCollectionData.
 
-            console.log(`${uuid} is saved to collection`);
+            console.log(`${id} is saved to collection`);
             console.log(saveCollectionResult);
         }
         console.log('face register succeed.');
