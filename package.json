@@ -6,7 +6,7 @@
   "author": "Kim Ilsik",
   "license": "MIT",
   "scripts": {
-    "start" : "yarn run dev-server",
+    "start": "yarn run dev-server",
     "dev-server": "node ./bin/www",
     "test": "mocha tests/**/*.test.js"
   },
@@ -20,6 +20,7 @@
     "errorhandler": "^1.5.0",
     "expect": "^22.4.0",
     "express": "^4.16.2",
+    "fcm-node": "^1.2.1",
     "firebase": "^4.10.1",
     "geofire": "^4.1.2",
     "mocha": "^5.0.4",

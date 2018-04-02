@@ -21,7 +21,10 @@ const UserSchema = new mongoose.Schema({
         imageIds : [String]
     }],
     mobile : {
-        token : String
+        token : {
+            type : String,
+            required : true
+        },
     },
     device : {
         id : String,
@@ -31,12 +34,17 @@ const UserSchema = new mongoose.Schema({
 UserSchema.statics.findByEmail = async function (email) {
     const User = this;
     return await User.findOne({email});
+};
 
-    // return User.findOne({email}).then((user) => {
-    //     if (!user) throw new Error("no user found.");
-    //     resolve(user);
-    // })
-    //     .catch(err => reject(err));
+UserSchema.statics.findByEmailAndUpdateClientToken = async function (email, clientToken) {
+    const User = this;
+    const query = {email};
+    const update = {
+        mobile : {
+            token : clientToken
+        }
+    };
+    return await User.findOneAndUpdate(query, update).exec();
 };
 
 UserSchema.statics.saveS3ImageData = async function (email, uuid, designation) {
@@ -57,6 +65,8 @@ UserSchema.statics.saveS3ImageData = async function (email, uuid, designation) {
         throw new Error(e);
     }
 };
+
+// UserSchema.statics.get
 
 UserSchema.statics.findByEmailAndUpdateS3 = async function (body) {
     const User = this;

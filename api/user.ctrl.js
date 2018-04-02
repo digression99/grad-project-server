@@ -2,26 +2,26 @@ const User = require('../models/User');
 const {
     createRekognitionCollection,
     recognizeFace,
-    saveImageToCollection,
-    saveImageToS3,
-    recognizeFaceInBlacklist,
     makeGeoQuery,
     saveImageToCollectionWithS3
 } = require('../lib/index');
 
 exports.registerUser = async (req, res) => {
 
-    const {email, password} = req.body;
+    const {email, password, token} = req.body;
 
     const user = new User({
         email,
-        password
+        password,
+        mobile : {
+            token
+        }
     });
 
     try {
         await user.save();
         res.status(200).json({
-            message : "registerUser",
+            message : "registerUser succeed.",
             user
         });
     } catch (e) {
@@ -51,8 +51,6 @@ exports.faceRegister = async (req, res) => {
         // save image to collection with proper designation.
         // send the result to device.
 
-        // const replaced = email.replace(/[@.]/g, '-');
-
         await createRekognitionCollection(email);
 
         for (let id of uuid) {
@@ -78,46 +76,6 @@ exports.faceRegister = async (req, res) => {
             error : e
         });
     }
-
-    //
-    // try {
-    //     // should create collection first.
-    //     // username 찾기.
-    //     const replaced = email.replace(/[@.]/g, '-');
-    //
-    //     await createRekognitionCollection(replaced);
-    //     // console.log();
-    //     console.log('collection created.');
-    //
-    //     // can this be ok with several images?
-    //     for (let img of faceData) {
-    //         // first, should change base64 to normal image.
-    //         // but, don't do the business logic in here, just send base64 image to function.
-    //         // or not.
-    //         const decoded = new Buffer.from(img, 'base64');
-    //         // upload image to S3.
-    //         const S3SaveResult = await saveImageToS3(email, designation, decoded);
-    //         console.log('s3 save result : ', S3SaveResult);
-    //
-    //
-    //         // if upload is finished, use save image to collection to designated
-    //         const saveCollectionResult = await saveImageToCollection(replaced, designation, decoded);
-    //         console.log('collection save result : ', saveCollectionResult);
-    //
-    //         uuidArr.push(S3SaveResult.uuid);
-    //     }
-    //
-    //     res.status(200).json({
-    //         message : "faceRegister complete.",
-    //         uuidArr
-    //     });
-    // } catch (e) {
-    //     console.log('error occured.');
-    //     console.log(e);
-    //     res.status(400).json({
-    //         error : e
-    //     });
-    // }
 };
 
 exports.faceDetect = async (req, res) => {
@@ -141,42 +99,6 @@ exports.faceDetect = async (req, res) => {
             error : e
         });
     }
-
-    //
-    //
-    // try {
-    //     // get image from the buffer.
-    //     console.log('before decoded.');
-    //
-    //     const decoded = new Buffer.from(img, 'base64');
-    //     const result = await recognizeFace(replaced, decoded);
-    //
-    //     console.log('recognize face success.');
-    //
-    //     if (result === 'unknown') {
-    //         // should use different function.
-    //         const blackListResult = await recognizeFaceInBlacklist(decoded);
-    //
-    //
-    //         if (blackListResult === 'unknown') {
-    //             res.status(200).json({
-    //                 message : "stranger"
-    //             });
-    //         } else {
-    //             res.status(200).json({
-    //                 message : "blacklist"
-    //             });
-    //         }
-    //     }
-    //     res.status(200).json({
-    //         message : result
-    //     });
-    // } catch (e) {
-    //     console.log(e);
-    //     res.status(400).json({
-    //         error : e
-    //     });
-    // }
 };
 
 exports.getProfile = async (req, res) => {
@@ -185,6 +107,7 @@ exports.getProfile = async (req, res) => {
 
     try {
         const user = await User.findByEmail(email);
+        if (!user) throw new Error("no user found");
 
         res.status(200).json({
             email : user.email,
@@ -192,7 +115,6 @@ exports.getProfile = async (req, res) => {
         });
     } catch (e) {
         console.log(e);
-
         res.status(400).json({
             message : e
         });
