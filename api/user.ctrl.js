@@ -38,9 +38,6 @@ exports.getFaces = (req, res) => {
 };
 
 exports.faceRegister = async (req, res) => {
-    // const {email, designation, faceData} = req.body;
-    // face data is images, base64.
-
     const {email, designation, uuid} = req.body;
 
     console.log('face register entered.');
@@ -50,6 +47,10 @@ exports.faceRegister = async (req, res) => {
         // create rekognition collection.
         // save image to collection with proper designation.
         // send the result to device.
+
+        if (!email) throw new Error("no email provided.");
+        if (!designation) throw new Error("no designation provided.");
+        if (!uuid) throw new Error("no uuid provided.");
 
         await createRekognitionCollection(email);
 
@@ -90,7 +91,6 @@ exports.faceDetect = async (req, res) => {
         res.status(200).json({
             message : result,
         });
-
     } catch (e) {
         console.log('error occured.');
         console.log(e);
