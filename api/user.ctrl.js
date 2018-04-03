@@ -90,7 +90,11 @@ exports.faceDetect = async (req, res) => {
 
     try {
         const result = await recognizeFace(email, designation, uuid);
-        if (!result) {
+
+        console.log("result is : ");
+        console.log(result);
+
+        if (result === "unknown") {
             // no user found.
             // black list check.
             res.status(200).json({
