@@ -53,6 +53,8 @@ exports.faceRegister = async (req, res) => {
         if (!uuid) throw new Error("no uuid provided.");
 
         await createRekognitionCollection(email);
+        // androidprojectapp-userfiles-mobilehub-1711223959
+        // androidprojectapp-userfiles-mobilehub-1711223959
 
         for (let id of uuid) {
             const saveCollectionResult = await saveImageToCollectionWithS3(email, designation, id);
@@ -88,6 +90,15 @@ exports.faceDetect = async (req, res) => {
 
     try {
         const result = await recognizeFace(email, designation, uuid);
+        if (!result) {
+            // no user found.
+            // black list check.
+            res.status(200).json({
+                message : "unknown"
+            });
+            return;
+        }
+
         res.status(200).json({
             message : result,
         });
@@ -124,19 +135,28 @@ exports.getProfile = async (req, res) => {
 exports.handleEmergency = async (req, res) => {
 
     // get data from req body.
-    const {email, location} = req.body;
+    const {email, current_location, locations} = req.body;
 
-    const resString = email.replace(/[.@]/g, '-');
-    console.log("res :", resString);
+    console.log("email is : ", email);
+    console.log('current location : ');
+    console.log(current_location);
 
-    console.log('handle emergency.');
-    console.log('email is : ', email);
+    console.log('locations : ');
+    console.log(locations);
 
-    // make query. this to library func.
-    await makeGeoQuery(resString, location);
-    // console.log("query : ", query);
+    try {
+        // make query. this to library func.
+        const result = await makeGeoQuery(email, current_location);
 
-    res.status(200).json({
-        message : "handle emergency"
-    });
+        res.status(200).json({
+            message : result
+        } );
+
+    } catch (e) {
+        console.log('error occured.');
+        console.log(e);
+        res.status(400).json({
+            error : e
+        });
+    }
 };
