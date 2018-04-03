@@ -133,18 +133,16 @@ exports.getProfile = async (req, res) => {
 };
 
 exports.handleEmergency = async (req, res) => {
-
-    // get data from req body.
-    const {email, current_location, locations} = req.body;
-
-    console.log("email is : ", email);
-    console.log('current location : ');
-    console.log(current_location);
-
-    console.log('locations : ');
-    console.log(locations);
-
     try {
+        // get data from req body.
+        const {email, current_location, locations} = req.body;
+
+        console.log("email is : ", email);
+        console.log('current location : ');
+        console.log(current_location);
+
+        console.log('locations : ');
+        console.log(locations);
         // make query. this to library func.
         const result = await makeGeoQuery(email, current_location);
 
