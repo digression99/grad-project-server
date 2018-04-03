@@ -3,7 +3,8 @@ const {
     createRekognitionCollection,
     recognizeFace,
     makeGeoQuery,
-    saveImageToCollectionWithS3
+    saveImageToCollectionWithS3,
+    changeImagePermissionInS3
 } = require('../lib/index');
 
 exports.registerUser = async (req, res) => {
@@ -57,6 +58,8 @@ exports.faceRegister = async (req, res) => {
         // androidprojectapp-userfiles-mobilehub-1711223959
 
         for (let id of uuid) {
+            // await
+            await changeImagePermissionInS3(email, designation, id);
             const saveCollectionResult = await saveImageToCollectionWithS3(email, designation, id);
 
             // if data has returned, you need to save it to database.
