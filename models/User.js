@@ -34,7 +34,17 @@ const UserSchema = new mongoose.Schema({
 
 UserSchema.statics.findByEmail = async function (email) {
     const User = this;
-    return await User.findOne({email});
+    try {
+        const user = await findOne({email});
+        return user;
+        // resolve(user);
+    } catch (e) {
+        console.log('error occred in find by email.');
+        console.log(e);
+        throw new Error(e);
+    }
+    //
+    // return await User.findOne({email});
 };
 
 UserSchema.statics.saveCollectionData = async function (email, designation, faceId, imageId) {
