@@ -18,12 +18,13 @@ const UserSchema = new mongoose.Schema({
     // you know the collection id. it's email.
     rekognition : [{ // for deletion.
         faceId : String,
-        imageIds : [String]
+        imageId : String,
+        designation : String
     }],
     mobile : {
         token : {
             type : String,
-            required : true
+            // required : true
         },
     },
     device : {
@@ -34,6 +35,21 @@ const UserSchema = new mongoose.Schema({
 UserSchema.statics.findByEmail = async function (email) {
     const User = this;
     return await User.findOne({email});
+};
+
+UserSchema.statics.saveCollectionData = async function (email, designation, faceId, imageId) {
+    const User = this;
+    try {
+        const user = await User.findOne({email});
+        await user.rekognition.push({
+            faceId, imageId, designation
+        });
+        await user.save();
+    } catch (e) {
+        console.log('error occured in save collection data.');
+        console.log(e);
+        throw new Error(e);
+    }
 };
 
 UserSchema.statics.findByEmailAndUpdateClientToken = async function (email, clientToken) {
@@ -47,11 +63,11 @@ UserSchema.statics.findByEmailAndUpdateClientToken = async function (email, clie
     return await User.findOneAndUpdate(query, update).exec();
 };
 
-UserSchema.statics.saveS3ImageData = async function (email, uuid, designation) {
+UserSchema.statics.saveS3ImageData = async function (email, designation, uuid) {
     const User = this;
     const timestamp = moment(); // here, you check the time stamp and save it.
     const replaced = email.replace(/[@.]/g, '-');
-    const key = `${replaced}-${designation}-${uuid}`;
+    const key = `${replaced}/${designation}/${uuid}`;
 
     try {
         const user = await User.findOne({email});
@@ -59,6 +75,7 @@ UserSchema.statics.saveS3ImageData = async function (email, uuid, designation) {
             key,
             timestamp
         });
+        user.save();
     } catch (e) {
         console.log('error occured in save s3 image data');
         console.log(e);
@@ -77,6 +94,19 @@ UserSchema.statics.findByEmailAndUpdateS3 = async function (body) {
     return await User.findOneAndUpdate(query, update).exec();
 };
 
+UserSchema.statics.findLogData = async function (email) {
+    const User = this;
+    const user = User.findOne({email});
+    const query = {
+        timestamp : moment.now()
+    };
+
+    const result = await User.find(query).select('S3').exec();
+
+
+
+}
+
 UserSchema.statics.findByEmailAndUpdateRekognition = async function (body) {
     const User = this;
     const {email, rekognitionData} = body;
@@ -85,5 +115,7 @@ UserSchema.statics.findByEmailAndUpdateRekognition = async function (body) {
 
     return await User.findOneAndUpdate(query, update).exec();
 };
+
+// UserSchema.statics.saveS3Image
 
 module.exports = mongoose.model('user', UserSchema);

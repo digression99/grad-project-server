@@ -4,7 +4,10 @@ const {
     recognizeFace,
     makeGeoQuery,
     saveImageToCollectionWithS3,
-    changeImagePermissionInS3
+    changeImagePermissionInS3,
+    saveS3ImageDataToDB,
+    saveCollectionDataToDB,
+    sendMobileNotificationToUser
 } = require('../lib/index');
 
 exports.registerUser = async (req, res) => {
@@ -45,34 +48,27 @@ exports.faceRegister = async (req, res) => {
     console.log("email is : ", email);
 
     try {
-        // create rekognition collection.
-        // save image to collection with proper designation.
-        // send the result to device.
 
         if (!email) throw new Error("no email provided.");
         if (!designation) throw new Error("no designation provided.");
         if (!uuid) throw new Error("no uuid provided.");
 
         await createRekognitionCollection(email);
-        // androidprojectapp-userfiles-mobilehub-1711223959
-        // androidprojectapp-userfiles-mobilehub-1711223959
 
         for (let id of uuid) {
-            // await pify(setTimeout)
-
             // await
             await changeImagePermissionInS3(email, designation, id);
             const saveCollectionResult = await saveImageToCollectionWithS3(email, designation, id);
-
-            // if data has returned, you need to save it to database.
-            // save faceIds, imageIds.
-
-            // saveCollectionData.
+            // data save to mongo db.
+            await saveCollectionDataToDB(email, designation, saveCollectionResult);
+            await saveS3ImageDataToDB(email, id, designation);
 
             console.log(`${id} is saved to collection`);
             console.log(saveCollectionResult);
         }
+
         console.log('face register succeed.');
+
         res.status(200).json({
             message : "succeed."
         });
@@ -98,6 +94,12 @@ exports.faceDetect = async (req, res) => {
 
         console.log("result is : ");
         console.log(result);
+
+        // fcm -> send message.
+        await sendMobileNotificationToUser(email, {
+            // result,
+            uuid
+        });
 
         if (result === "unknown") {
             // no user found.
@@ -167,3 +169,8 @@ exports.handleEmergency = async (req, res) => {
         });
     }
 };
+
+exports.sendLogData = async (req, res) => {
+
+
+}
