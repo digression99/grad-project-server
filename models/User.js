@@ -36,8 +36,8 @@ UserSchema.statics.findByEmail = async function (email) {
     const User = this;
     try {
         const user = await User.findOne({email});
-        console.log('user : ');
-        console.log(user);
+        // console.log('user : ');
+        // console.log(user);
         return user;
         // resolve(user);
     } catch (e) {
@@ -45,8 +45,6 @@ UserSchema.statics.findByEmail = async function (email) {
         console.log(e);
         throw new Error(e);
     }
-    //
-    // return await User.findOne({email});
 };
 
 UserSchema.statics.saveCollectionData = async function (email, designation, faceId, imageId) {
