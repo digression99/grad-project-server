@@ -58,6 +58,8 @@ exports.faceRegister = async (req, res) => {
         // androidprojectapp-userfiles-mobilehub-1711223959
 
         for (let id of uuid) {
+            // await pify(setTimeout)
+
             // await
             await changeImagePermissionInS3(email, designation, id);
             const saveCollectionResult = await saveImageToCollectionWithS3(email, designation, id);
@@ -155,7 +157,7 @@ exports.handleEmergency = async (req, res) => {
 
         res.status(200).json({
             message : result
-        } );
+        });
 
     } catch (e) {
         console.log('error occured.');
