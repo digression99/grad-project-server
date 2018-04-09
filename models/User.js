@@ -35,7 +35,7 @@ const UserSchema = new mongoose.Schema({
 UserSchema.statics.findByEmail = async function (email) {
     const User = this;
     try {
-        const user = await findOne({email});
+        const user = await User.findOne({email});
         return user;
         // resolve(user);
     } catch (e) {
