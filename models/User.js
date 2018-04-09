@@ -36,6 +36,8 @@ UserSchema.statics.findByEmail = async function (email) {
     const User = this;
     try {
         const user = await User.findOne({email});
+        console.log('user : ');
+        console.log(user);
         return user;
         // resolve(user);
     } catch (e) {
