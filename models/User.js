@@ -71,11 +71,11 @@ UserSchema.statics.saveS3ImageData = async function (email, designation, uuid) {
 
     try {
         const user = await User.findOne({email});
-        await user.S3.push({
+        user.S3.push({
             key,
             timestamp
         });
-        user.save();
+        await user.save();
     } catch (e) {
         console.log('error occured in save s3 image data');
         console.log(e);
