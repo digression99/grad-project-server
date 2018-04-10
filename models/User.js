@@ -38,9 +38,13 @@ UserSchema.statics.getLogDataWithDuration = async function(email, duration) {
     try {
         const data = await User.findOne({email}).select('S3').exec();
         console.log(data);
-        if (!user) throw new Error('no user found');
+        if (!data) throw new Error('no user found');
 
-        return data.filter(val => val.timestamp > duration);
+        return data.S3.filter(val => val.timestamp > duration)
+            .map(dat => ({
+                key : dat.key,
+                timestamp : dat.timestamp
+            }))
     } catch (e) {
         console.log('error occured in get log data with duration.');
         console.log(e);
