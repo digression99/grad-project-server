@@ -32,6 +32,22 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
+UserSchema.statics.getLogDataWithDuration = async function(email, duration ) {
+    const User = this;
+    try {
+        const data = await User.findOne({email}).select('S3');
+        if (!user) throw new Error('no user found');
+        // find data.
+
+        return data.filter(val => val.timestamp > duration);
+    } catch (e) {
+        console.log('error occured in get log data with duration.');
+        console.log(e);
+
+
+    }
+};
+
 UserSchema.statics.findByEmail = async function (email) {
     const User = this;
     try {

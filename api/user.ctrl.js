@@ -7,7 +7,8 @@ const {
     changeImagePermissionInS3,
     saveS3ImageDataToDB,
     saveCollectionDataToDB,
-    sendMobileNotificationToUser
+    sendMobileNotificationToUser,
+    getLogData
 } = require('../lib/index');
 
 exports.registerUser = async (req, res) => {
@@ -171,6 +172,25 @@ exports.handleEmergency = async (req, res) => {
 };
 
 exports.sendLogData = async (req, res) => {
+    // if the client send the request for the log,
+    // then you need to find the uuids of recent photos and send it to the client.
+    // first, send uuid and last, send the timestamp, or both.
 
+    const {
+        email,
+        duration
+    } = req.body;
 
-}
+    try {
+        const res = await getLogData(email, duration);
+        res.status(200).json({
+            result : res
+        });
+    } catch (e) {
+        console.error('send log data');
+        console.log(e);
+        res.status(400).json({
+            error : e
+        });
+    }
+};

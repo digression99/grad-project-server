@@ -13,8 +13,6 @@ user.post('/face-register', userCtrl.faceRegister);
 user.post('/face-detect', userCtrl.faceDetect);
 user.post('/profile', userCtrl.getProfile);
 user.post('/emergency', userCtrl.handleEmergency);
-
-// test functions
-// user.get('/');
+user.post('/logs', userCtrl.sendLogData);
 
 module.exports = user;
