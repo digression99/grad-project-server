@@ -182,9 +182,9 @@ exports.sendLogData = async (req, res) => {
     } = req.body;
 
     try {
-        const res = await getLogData(email, duration);
+        const result = await getLogData(email, duration);
         res.status(200).json({
-            result : res
+            result
         });
     } catch (e) {
         console.error('send log data');
