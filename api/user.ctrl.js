@@ -206,8 +206,13 @@ exports.addLocation = async(req, res) => {
     try {
         if (!email) throw new Error("email required.");
         if (!location) throw new Error("location required.");
+        const latitude = parseFloat(location.lat);
+        const longitude = parseFloat(location.lng);
 
-        await addGeoLocationToGeoQuery(email, location);
+        await addGeoLocationToGeoQuery(email, {
+            latitude,
+            longitude
+        });
 
         res.status(200).json({
             message : "geo location succeed.",
