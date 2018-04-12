@@ -30,6 +30,7 @@
     "node-base64-image": "^1.0.4",
     "pify": "^3.0.0",
     "supertest": "^3.0.0",
+    "twilio": "^3.14.0",
     "uuid": "^3.2.1"
   }
 }
