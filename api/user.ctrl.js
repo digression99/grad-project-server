@@ -8,7 +8,8 @@ const {
     saveS3ImageDataToDB,
     saveCollectionDataToDB,
     sendMobileNotificationToUser,
-    getLogData
+    getLogData,
+    addGeoLocationToGeoQuery
 } = require('../lib/index');
 
 exports.registerUser = async (req, res) => {
@@ -188,6 +189,33 @@ exports.sendLogData = async (req, res) => {
         });
     } catch (e) {
         console.error('send log data');
+        console.log(e);
+        res.status(400).json({
+            error : e
+        });
+    }
+};
+
+exports.addLocation = async(req, res) => {
+
+    const {
+        email,
+        location
+    } = req.body;
+
+    try {
+        if (!email) throw new Error("email required.");
+        if (!location) throw new Error("location required.");
+
+        await addGeoLocationToGeoQuery(email, location);
+
+        res.status(200).json({
+            message : "geo location succeed.",
+            email,
+            location
+        });
+    } catch (e) {
+        console.log('error add location.');
         console.log(e);
         res.status(400).json({
             error : e

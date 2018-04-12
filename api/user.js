@@ -14,5 +14,6 @@ user.post('/face-detect', userCtrl.faceDetect);
 user.post('/profile', userCtrl.getProfile);
 user.post('/emergency', userCtrl.handleEmergency);
 user.post('/logs', userCtrl.sendLogData);
+user.post('/add-location', userCtrl.addLocation);
 
 module.exports = user;
