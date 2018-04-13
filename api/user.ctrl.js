@@ -159,6 +159,10 @@ exports.handleEmergency = async (req, res) => {
         // make query. this to library func.
         const result = await makeGeoQuery(email, current_location);
 
+        // send last location to parent.
+        const url = `https://www.google.com/maps/search/?api=1&query=${current_location.latitude},${current_location.longitude}`;
+        await sendSMSToUser('+821099177190', `사용자가 위급합니다. 위치 :${url}`);
+
         res.status(200).json({
             message : result
         });
