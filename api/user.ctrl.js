@@ -158,6 +158,8 @@ exports.handleEmergency = async (req, res) => {
         console.log(locations);
         // make query. this to library func.
         const result = await makeGeoQuery(email, current_location);
+        console.log('geo query result is : ');
+        console.log(result);
 
         // send last location to parent.
         const url = `https://www.google.com/maps/search/?api=1&query=${current_location.latitude},${current_location.longitude}`;
