@@ -9,7 +9,8 @@ const {
     saveCollectionDataToDB,
     sendMobileNotificationToUser,
     getLogData,
-    addGeoLocationToGeoQuery
+    addGeoLocationToGeoQuery,
+    sendSMSToUser
 } = require('../lib/index');
 
 exports.registerUser = async (req, res) => {
