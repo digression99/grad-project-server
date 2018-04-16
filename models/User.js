@@ -22,7 +22,7 @@ const UserSchema = new mongoose.Schema({
         designation : String
     }],
     mobile : {
-        phoneNumber : String
+        phoneNumber : String,
         token : {
             type : String,
             // required : true
