@@ -86,8 +86,14 @@ UserSchema.statics.findByEmailAndUpdateClientToken = async function (email, clie
     const User = this;
     try {
         const user = await User.findOne({email});
-        user.mobile['token'] = clientToken;
-        await user.save();
+        if (!user) throw new Error("no user found.");
+        await user.update({
+            $set : {
+                mobile : {
+                    token : clientToken
+                }
+            }
+        });
     } catch (e) {
         console.log('error occured in find by email and update client token.');
         throw new Error(e);
@@ -147,7 +153,7 @@ UserSchema.statics.findByEmailAndUpdatePhoneNumber = async function (email, pn) 
     const User = this;
     try {
         console.log('phone number : ', pn);
-        const user = User.findOne({email});
+        const user = await User.findOne({email});
         if (!user) throw new Error("no user found.");
         // console.log('user : ');
         // console.log(JSON.stringify(user, undefined, 2));
