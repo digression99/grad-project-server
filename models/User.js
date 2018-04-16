@@ -22,6 +22,7 @@ const UserSchema = new mongoose.Schema({
         designation : String
     }],
     mobile : {
+        phoneNumber : String
         token : {
             type : String,
             // required : true
@@ -140,6 +141,22 @@ UserSchema.statics.findByEmailAndUpdateRekognition = async function (body) {
     const update = {rekognition : rekognitionData};
 
     return await User.findOneAndUpdate(query, update).exec();
+};
+
+
+UserSchema.statics.findByEmailAndUpdatePhoneNumber = async function (email, phoneNumber) {
+    const User = this;
+    try {
+        const query = {email};
+        const update = {
+            mobile : {phoneNumber}
+        };
+        await User.findOneAndUpdate(query, update).exec();
+    } catch (e) {
+        console.log('error occured in find by email and update phone number.');
+        console.log(e);
+        throw new Error(e);
+    }
 };
 
 // UserSchema.statics.saveS3Image

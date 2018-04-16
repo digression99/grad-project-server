@@ -16,4 +16,8 @@ user.post('/emergency', userCtrl.handleEmergency);
 user.post('/logs', userCtrl.sendLogData);
 user.post('/add-location', userCtrl.addLocation);
 
+// update request.
+user.put('/profile', userCtrl.updateProfile);
+// user.patch();
+
 module.exports = user;

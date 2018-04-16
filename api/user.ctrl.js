@@ -10,7 +10,8 @@ const {
     sendMobileNotificationToUser,
     getLogData,
     addGeoLocationToGeoQuery,
-    sendSMSToUser
+    sendSMSToUser,
+    updatePhoneNumber
 } = require('../lib/index');
 
 exports.registerUser = async (req, res) => {
@@ -164,9 +165,7 @@ exports.handleEmergency = async (req, res) => {
 
         // send last location to parent.
         const url = `https://www.google.com/maps/search/?api=1&query=${current_location.latitude},${current_location.longitude}`;
-        await sendSMSToUser('+821099177190', `위치 :${url}`);
-
-
+        await sendSMSToUser(email, `${url}`);
 
         res.status(200).json({
             message : result
@@ -230,6 +229,24 @@ exports.addLocation = async(req, res) => {
         });
     } catch (e) {
         console.log('error add location.');
+        console.log(e);
+        res.status(400).json({
+            error : e
+        });
+    }
+};
+
+exports.updateProfile = async (req, res) => {
+
+    try {
+        const {
+            email,
+            phoneNumber
+        } = req.body;
+
+        await updatePhoneNumber(email, phoneNumber);
+    } catch (e) {
+        console.log('error occured in update profile.');
         console.log(e);
         res.status(400).json({
             error : e
