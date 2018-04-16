@@ -18,6 +18,7 @@ user.post('/add-location', userCtrl.addLocation);
 
 // update request.
 user.put('/profile', userCtrl.updateProfile);
+user.put('/profile/token', userCtrl.updateToken);
 // user.patch();
 
 module.exports = user;
