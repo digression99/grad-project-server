@@ -84,13 +84,14 @@ UserSchema.statics.saveCollectionData = async function (email, designation, face
 
 UserSchema.statics.findByEmailAndUpdateClientToken = async function (email, clientToken) {
     const User = this;
-    const query = {email};
-    const update = {
-        mobile : {
-            token : clientToken
-        }
-    };
-    return await User.findOneAndUpdate(query, update).exec();
+    try {
+        const user = await User.findOne({email});
+        user.mobile['token'] = clientToken;
+        await user.save();
+    } catch (e) {
+        console.log('error occured in find by email and update client token.');
+        throw new Error(e);
+    }
 };
 
 UserSchema.statics.saveS3ImageData = async function (email, designation, uuid) {
@@ -147,9 +148,11 @@ UserSchema.statics.findByEmailAndUpdateRekognition = async function (body) {
 UserSchema.statics.findByEmailAndUpdatePhoneNumber = async function (email, pn) {
     const User = this;
     try {
+        console.log('phone number : ', pn);
         const user = User.findOne({email});
         if (!user) throw new Error("no user found.");
-        user.mobile['phoneNumber'] = pn;
+        // user.mobile['phoneNumber'] = pn;
+        user.mobile.phoneNumber = pn;
 
         //
         // user.mobile = {
