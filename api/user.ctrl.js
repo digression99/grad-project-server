@@ -95,7 +95,7 @@ exports.faceDetect = async (req, res) => {
 
         // fcm -> send message.
         await sendMobileNotificationToUser(email, {
-            // result,
+            result,
             uuid
         });
 
