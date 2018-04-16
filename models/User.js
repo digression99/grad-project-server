@@ -144,14 +144,20 @@ UserSchema.statics.findByEmailAndUpdateRekognition = async function (body) {
 };
 
 
-UserSchema.statics.findByEmailAndUpdatePhoneNumber = async function (email, phoneNumber) {
+UserSchema.statics.findByEmailAndUpdatePhoneNumber = async function (email, pn) {
     const User = this;
     try {
-        const query = {email};
-        const update = {
-            mobile : {phoneNumber}
-        };
-        await User.findOneAndUpdate(query, update).exec();
+        const user = User.findOne({email});
+        user.mobile.phoneNumber = pn;
+        await user.save();
+        // const query = {email};
+        // const update = {
+        //     mobile : {
+        //         phoneNumber : pn
+        //     }
+        // };
+        // await User.findOneAndUpdate(query, update).exec();
+
     } catch (e) {
         console.log('error occured in find by email and update phone number.');
         console.log(e);
