@@ -149,10 +149,13 @@ UserSchema.statics.findByEmailAndUpdatePhoneNumber = async function (email, pn) 
     try {
         const user = User.findOne({email});
         if (!user) throw new Error("no user found.");
-        user.mobile = {
-            token : user.mobile.token,
-            phoneNumber : pn
-        };
+        user.mobile['phoneNumber'] = pn;
+
+        //
+        // user.mobile = {
+        //     token : user.mobile.token,
+        //     phoneNumber : pn
+        // };
         // user.set({
         //     mobile : {
         //         phoneNumber : pn
