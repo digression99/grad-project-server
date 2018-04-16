@@ -245,6 +245,10 @@ exports.updateProfile = async (req, res) => {
         } = req.body;
 
         await updatePhoneNumber(email, phoneNumber);
+        res.status(200).json({
+            message : "update succeed.",
+            email : "jojo@gmail.com"
+        });
     } catch (e) {
         console.log('error occured in update profile.');
         console.log(e);
