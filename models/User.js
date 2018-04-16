@@ -114,8 +114,6 @@ UserSchema.statics.saveS3ImageData = async function (email, designation, uuid) {
     }
 };
 
-// UserSchema.statics.get
-
 UserSchema.statics.findByEmailAndUpdateS3 = async function (body) {
     const User = this;
     const {email, S3Data} = body;
@@ -153,9 +151,16 @@ UserSchema.statics.findByEmailAndUpdatePhoneNumber = async function (email, pn) 
         if (!user) throw new Error("no user found.");
         console.log('user : ');
         console.log(JSON.stringify(user, undefined, 2));
+        await user.update({
+            $set : {
+                mobile : {
+                    phoneNumber : pn
+                }
+            }
+        });
 
         // user.mobile['phoneNumber'] = pn;
-        user.mobile.phoneNumber = pn;
+        // user.mobile.phoneNumber = pn;
 
         //
         // user.mobile = {
@@ -168,7 +173,7 @@ UserSchema.statics.findByEmailAndUpdatePhoneNumber = async function (email, pn) 
         //     }
         // });
         // user.mobile.phoneNumber = pn;
-        await user.save();
+        // await user.save();
         // const query = {email};
         // const update = {
         //     mobile : {
