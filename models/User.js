@@ -54,17 +54,17 @@ UserSchema.statics.getLogDataWithDuration = async function(email, duration) {
 
 UserSchema.statics.findByEmail = async function (email) {
     const User = this;
-    try {
-        const user = await User.findOne({email});
-        // console.log('user : ');
-        // console.log(user);
-        return user;
-        // resolve(user);
-    } catch (e) {
-        console.log('error occred in find by email.');
-        console.log(e);
-        throw new Error(e);
-    }
+    return new Promise(async (resolve, reject) => {
+        try {
+            const user = await User.findOne({email});
+            if (!user) throw new Error('no user found.');
+            resolve(user);
+        } catch (e) {
+            console.log('error occred in find by email.');
+            console.log(e);
+            reject(e);
+        }
+    });
 };
 
 UserSchema.statics.saveCollectionData = async function (email, designation, faceId, imageId) {
