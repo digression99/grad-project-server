@@ -1,3 +1,5 @@
+
+const User = require('../models/User');
 const {
     createRekognitionCollection,
     recognizeFace,
@@ -20,6 +22,9 @@ exports.registerUser = async (req, res) => {
     const {email, password, token} = req.body;
 
     try {
+        const user = User.findByEmail({email});
+        if (user) throw new Error('user already exists.');
+
         await saveUserToDB(email, password, token);
         res.status(200).json({
             message : "registerUser succeed.",
