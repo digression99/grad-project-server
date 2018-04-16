@@ -149,8 +149,8 @@ UserSchema.statics.findByEmailAndUpdatePhoneNumber = async function (email, pn) 
         console.log('phone number : ', pn);
         const user = User.findOne({email});
         if (!user) throw new Error("no user found.");
-        console.log('user : ');
-        console.log(JSON.stringify(user, undefined, 2));
+        // console.log('user : ');
+        // console.log(JSON.stringify(user, undefined, 2));
         await user.update({
             $set : {
                 mobile : {
