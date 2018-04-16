@@ -166,6 +166,8 @@ exports.handleEmergency = async (req, res) => {
         const url = `https://www.google.com/maps/search/?api=1&query=${current_location.latitude},${current_location.longitude}`;
         await sendSMSToUser('+821099177190', `위치 :${url}`);
 
+
+
         res.status(200).json({
             message : result
         });
