@@ -93,21 +93,37 @@ exports.faceDetect = async (req, res) => {
         console.log("result is : ");
         console.log(result);
 
-        // fcm -> send message.
-        await sendMobileNotificationToUser(email, {
-            result,
-            uuid
-        });
-
-        if (result === "unknown") {
-            // no user found.
-            // black list check.
-            res.status(200).json({
-                message : "unknown"
-            });
-            return;
+        switch (result) {
+            case 'unknown':
+                await sendMobileNotificationToUser(email,
+                    {result, uuid},
+                    "SHOW_VISITOR",
+                    "외부인 탐지",
+                    "외부인이 방문했습니다.");
+                break;
+            case 'user':
+                await sendMobileNotificationToUser(email,
+                    {result, uuid},
+                    "SHOW_USER",
+                    "사용자 귀가",
+                    "사용자가 귀가했습니다.");
+                break;
+            case 'friend':
+                await sendMobileNotificationToUser(email,
+                    {result, uuid},
+                    "SHOW_VISITOR",
+                    "친구 방문",
+                    "친구가 방문했습니다.");
+                break;
         }
-
+        // if (result === "unknown") {
+        //     // no user found.
+        //     // black list check.
+        //     res.status(200).json({
+        //         message : "unknown"
+        //     });
+        //     return;
+        // }
         res.status(200).json({
             message : result,
         });
