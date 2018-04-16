@@ -237,7 +237,7 @@ exports.addLocation = async(req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-
+    console.log('entered update profile.');
     try {
         const {
             email,
