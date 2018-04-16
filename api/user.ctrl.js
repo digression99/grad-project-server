@@ -1,4 +1,3 @@
-const User = require('../models/User');
 const {
     createRekognitionCollection,
     recognizeFace,
@@ -11,26 +10,19 @@ const {
     getLogData,
     addGeoLocationToGeoQuery,
     sendSMSToUser,
-    updatePhoneNumber
+    updatePhoneNumber,
+    saveUserToDB
 } = require('../lib/index');
 
 exports.registerUser = async (req, res) => {
 
     const {email, password, token} = req.body;
 
-    const user = new User({
-        email,
-        password,
-        mobile : {
-            token
-        }
-    });
-
     try {
-        await user.save();
+        await saveUserToDB(email, password, token);
         res.status(200).json({
             message : "registerUser succeed.",
-            user
+            email
         });
     } catch (e) {
         res.status(400).json({
