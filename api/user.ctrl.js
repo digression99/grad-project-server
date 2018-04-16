@@ -85,6 +85,7 @@ exports.faceDetect = async (req, res) => {
 
     // const replaced = email.replace(/[@.]/g, '-');
     console.log('face detect entered.');
+    console.log('email : ', email);
 
     try {
         const result = await recognizeFace(email, designation, uuid);
