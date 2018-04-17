@@ -63,7 +63,7 @@ exports.faceRegister = async (req, res) => {
             const saveCollectionResult = await saveImageToCollectionWithS3(email, designation, id);
             // data save to mongo db.
             await saveCollectionDataToDB(email, designation, saveCollectionResult);
-            await saveS3ImageDataToDB(email, designation, id);
+            await saveS3ImageDataToDB(email, designation, id, 'user');
 
             console.log(`${id} is saved to collection`);
             console.log(saveCollectionResult);
@@ -121,14 +121,7 @@ exports.faceDetect = async (req, res) => {
                     "친구가 방문했습니다.");
                 break;
         }
-        // if (result === "unknown") {
-        //     // no user found.
-        //     // black list check.
-        //     res.status(200).json({
-        //         message : "unknown"
-        //     });
-        //     return;
-        // }
+        await saveS3ImageDataToDB(email, designation, uuid, result);
         res.status(200).json({
             message : result,
         });

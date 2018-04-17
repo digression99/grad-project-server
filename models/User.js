@@ -101,7 +101,7 @@ UserSchema.statics.findByEmailAndUpdateClientToken = async function (email, clie
     }
 };
 
-UserSchema.statics.saveS3ImageData = async function (email, designation, uuid) {
+UserSchema.statics.saveS3ImageData = async function (email, designation, uuid, result) {
     const User = this;
     const timestamp = moment().valueOf(); // here, you check the time stamp and save it.
     const replaced = email.replace(/[@.]/g, '-');
@@ -111,7 +111,8 @@ UserSchema.statics.saveS3ImageData = async function (email, designation, uuid) {
         const user = await User.findOne({email});
         user.S3.push({
             key,
-            timestamp
+            timestamp,
+            result
         });
         await user.save();
     } catch (e) {
