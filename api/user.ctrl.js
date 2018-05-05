@@ -247,12 +247,18 @@ exports.addLocation = async(req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-    console.log('entered update profile.');
+    // console.log('entered update profile.');
     try {
         const {
             email,
             data
         } = req.body;
+        // data : {
+        //     "password" : "blabla"
+        //     "device" : {
+        //         "id" : "idididid123"
+        //     }
+        // }
 
         await updateUserProfile(email, data);
 

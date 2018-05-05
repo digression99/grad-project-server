@@ -14,10 +14,10 @@ const UserSchema = new mongoose.Schema({
         key : String, // image key. uuid.
         timestamp : Number
     }],
-    protectors : [{
+    protector : {
         phoneNumber : String,
         name : String
-    }],
+    },
     rekognition : [{ // for deletion.
         faceId : String,
         imageId : String,
@@ -83,12 +83,13 @@ UserSchema.statics.getPhoneNumberByEmail = async function (email) {
     }
 };
 
-UserSchema.statics.getProtectorsByEmail = async function (email) {
+UserSchema.statics.getProtectorByEmail = async function (email) {
     const User = this;
     try {
         const user = await User.findOne({email});
-        const protectors = user.protectors;
-        return protectors;
+        return user.protector;
+        // const protector = user.protectors;
+        // return protectors;
     } catch (e) {
         console.log('error occured in get phone number by email');
         console.log(e);
@@ -168,11 +169,20 @@ UserSchema.statics.saveProtectorData = async function (email, phoneNumber, name)
 };
 
 UserSchema.statics.findByEmailAndUpdateUser = async function (email, docs) {
+    console.log('enter find by email and update user');
     const User = this;
-    const query = {email};
-    const update = {$set: {docs}};
 
-    return await User.findOneAndUpdate(query, update).exec();
+    try {
+        const query = {email};
+        const update = {$set: {...docs}};
+        console.log('update : ');
+        console.log(JSON.stringify(update, undefined, 2));
+        await User.findOneAndUpdate(query, update).exec();
+    } catch (e) {
+        console.log('error occured in find by email and update user');
+        console.log(e);
+        throw new Error(e);
+    }
 };
 
 UserSchema.statics.findLogData = async function (email) {
