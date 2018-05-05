@@ -14,8 +14,10 @@ const UserSchema = new mongoose.Schema({
         key : String, // image key. uuid.
         timestamp : Number
     }],
-    // not using it now.
-    // you know the collection id. it's email.
+    protectors : [{
+        phoneNumber : String,
+        name : String
+    }],
     rekognition : [{ // for deletion.
         faceId : String,
         imageId : String,
@@ -66,6 +68,33 @@ UserSchema.statics.findByEmail = async function (email) {
         }
     });
 };
+
+UserSchema.statics.getPhoneNumberByEmail = async function (email) {
+    const User = this;
+
+    try {
+        const user = await User.findOne({email});
+        const phoneNumber = user.mobile.phoneNumber;
+        return phoneNumber;
+    } catch (e) {
+        console.log('error occured in get phone number by email');
+        console.log(e);
+        throw new Error(e);
+    }
+};
+
+UserSchema.statics.getProtectorsByEmail = async function (email) {
+    const User = this;
+    try {
+        const user = await User.findOne({email});
+        const protectors = user.protectors;
+        return protectors;
+    } catch (e) {
+        console.log('error occured in get phone number by email');
+        console.log(e);
+        throw new Error(e);
+    }
+}
 
 UserSchema.statics.saveCollectionData = async function (email, designation, faceId, imageId) {
     const User = this;
@@ -122,11 +151,26 @@ UserSchema.statics.saveS3ImageData = async function (email, designation, uuid, r
     }
 };
 
-UserSchema.statics.findByEmailAndUpdateS3 = async function (body) {
+UserSchema.statics.saveProtectorData = async function (email, phoneNumber, name) {
     const User = this;
-    const {email, S3Data} = body;
+    try {
+        const user = await User.findOne({email});
+        user.protectors.push({
+            phoneNumber,
+            name
+        });
+        await user.save();
+    } catch (e) {
+        console.log('error occured in save protector data');
+        console.log(e);
+        throw new Error(e);
+    }
+};
+
+UserSchema.statics.findByEmailAndUpdateUser = async function (email, docs) {
+    const User = this;
     const query = {email};
-    const update = {S3 : S3Data};
+    const update = {$set: {docs}};
 
     return await User.findOneAndUpdate(query, update).exec();
 };
@@ -149,7 +193,6 @@ UserSchema.statics.findByEmailAndUpdateRekognition = async function (body) {
 
     return await User.findOneAndUpdate(query, update).exec();
 };
-
 
 UserSchema.statics.findByEmailAndUpdatePhoneNumber = async function (email, pn) {
     const User = this;

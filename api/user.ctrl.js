@@ -14,7 +14,9 @@ const {
     sendSMSToUser,
     updatePhoneNumber,
     saveUserToDB,
-    updateToken
+    updateToken,
+    sendSMSToProtectors,
+    updateUserProfile
 } = require('../lib/index');
 
 exports.registerUser = async (req, res) => {
@@ -126,10 +128,10 @@ exports.faceDetect = async (req, res) => {
             message : result,
         });
     } catch (e) {
-        console.log('error occured.');
+        console.log('error occured in face detect.');
         console.log(e);
         res.status(400).json({
-            message : "error occured.",
+            message : "error occured in face detect.",
             error : e
         });
     }
@@ -173,7 +175,7 @@ exports.handleEmergency = async (req, res) => {
 
         // send last location to parent.
         const url = `https://www.google.com/maps/search/?api=1&query=${current_location.latitude},${current_location.longitude}`;
-        await sendSMSToUser(email, url);
+        await sendSMSToProtectors(email, url);
 
         res.status(200).json({
             message : result
@@ -249,13 +251,14 @@ exports.updateProfile = async (req, res) => {
     try {
         const {
             email,
-            phoneNumber
+            data
         } = req.body;
 
-        await updatePhoneNumber(email, phoneNumber);
+        await updateUserProfile(email, data);
+
         res.status(200).json({
             message : "update succeed.",
-            email : "jojo@gmail.com"
+            email
         });
     } catch (e) {
         console.log('error occured in update profile.');
