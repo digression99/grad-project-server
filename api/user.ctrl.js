@@ -28,8 +28,8 @@ exports.registerUser = async (req, res) => {
     console.log("token : ", token);
 
     try {
-        const user = User.findByEmail(email);
-        if (user) throw new Error('user already exists.');
+        // const user = User.findByEmail(email);
+        // if (user) throw new Error('user already exists.');
         if (!email || !password || !token) throw new Error('no data accepted.');
 
         await saveUserToDB(email, password, token);
