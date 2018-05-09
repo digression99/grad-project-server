@@ -156,10 +156,19 @@ exports.getProfile = async (req, res) => {
         const user = await User.findByEmail(email);
         if (!user) throw new Error("no user found");
 
-        res.status(200).json({
+        const data = {
             email : user.email,
-            password : user.password
-        });
+            password : user.password,
+            protector : {
+                phoneNumber : user.protector.phoneNumber,
+                name : user.protector.name
+            },
+            mobile : {
+                phoneNumber : user.mobile.phoneNumber
+            }
+        };
+
+        res.status(200).json(data);
     } catch (e) {
         console.log(e);
         res.status(400).json({
