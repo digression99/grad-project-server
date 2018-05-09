@@ -59,8 +59,12 @@ UserSchema.statics.findByEmail = async function (email) {
     return new Promise(async (resolve, reject) => {
         try {
             const user = await User.findOne({email});
-            if (!user) throw new Error('no user found.');
             resolve(user);
+            // if (!user) resolve();
+            //
+            //
+            // if (!user) throw new Error('no user found.');
+            // resolve(user);
         } catch (e) {
             console.log('error occred in find by email.');
             console.log(e);
