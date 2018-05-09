@@ -91,7 +91,8 @@ UserSchema.statics.getProtectorByEmail = async function (email) {
     const User = this;
     try {
         const user = await User.findOne({email});
-        return user.protector;
+        return user;
+        // return user.protector;
         // const protector = user.protectors;
         // return protectors;
     } catch (e) {
@@ -99,7 +100,7 @@ UserSchema.statics.getProtectorByEmail = async function (email) {
         console.log(e);
         throw new Error(e);
     }
-}
+};
 
 UserSchema.statics.saveCollectionData = async function (email, designation, faceId, imageId) {
     const User = this;

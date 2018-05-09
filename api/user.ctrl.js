@@ -186,7 +186,8 @@ exports.handleEmergency = async (req, res) => {
 
         // send last location to parent.
         const url = `https://www.google.com/maps/search/?api=1&query=${current_location.latitude},${current_location.longitude}`;
-        await sendSMSToProtectors(email, url);
+        // await sendSMSToProtectors(email, url);
+        await sendSMSToUser("+821099177190", url);
 
         res.status(200).json({
             message : result
