@@ -33,11 +33,16 @@ exports.registerUser = async (req, res) => {
         if (!email || !password || !token) throw new Error('no data accepted.');
 
         await saveUserToDB(email, password, token);
+
+        console.log('save user to db succeed.');
+
         res.status(200).json({
             message : "registerUser succeed.",
             email
         });
     } catch (e) {
+        console.log('error occured in register user.');
+        console.log(e);
         res.status(400).json({
             message : e
         });
