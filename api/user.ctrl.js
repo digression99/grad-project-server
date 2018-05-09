@@ -119,6 +119,7 @@ exports.faceDetect = async (req, res) => {
                     "외부인이 방문했습니다.");
                 break;
             case 'user':
+            case 'detected':
                 await sendMobileNotificationToUser(email,
                     {result, uuid},
                     "SHOW_USER",
