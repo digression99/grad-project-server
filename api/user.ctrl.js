@@ -301,24 +301,24 @@ exports.updateProfile = async (req, res) => {
     }
 };
 
-exports.updateToken = async (req, res) => {
-    console.log('entered update profile.');
-    try {
-        const {
-            email,
-            token
-        } = req.body;
-
-        await updateToken(email, token);
-        res.status(200).json({
-            message : "update token succeed.",
-            email : "jojo@gmail.com"
-        });
-    } catch (e) {
-        console.log('error occured in update token.');
-        console.log(e);
-        res.status(400).json({
-            error : e
-        });
-    }
-};
+// exports.updateToken = async (req, res) => {
+//     console.log('entered update profile.');
+//     try {
+//         const {
+//             email,
+//             token
+//         } = req.body;
+//
+//         await updateToken(email, token);
+//         res.status(200).json({
+//             message : "update token succeed.",
+//             email
+//         });
+//     } catch (e) {
+//         console.log('error occured in update token.');
+//         console.log(e);
+//         res.status(400).json({
+//             error : e
+//         });
+//     }
+// };
