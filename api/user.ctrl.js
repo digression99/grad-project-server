@@ -28,7 +28,7 @@ exports.registerUser = async (req, res) => {
     console.log("token : ", token);
 
     try {
-        const user = User.findByEmail(email);
+        const user = await User.findByEmail(email);
         if (user) {
             res.status(200).json({
                 message : "user already exists",
