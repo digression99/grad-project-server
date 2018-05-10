@@ -90,7 +90,7 @@ exports.faceRegister = async (req, res) => {
         console.log('face register succeed.');
 
         res.status(200).json({
-            message : "succeed."
+            message : "face register succeed."
         });
     } catch (e) {
         console.log('error occured in face register.');
