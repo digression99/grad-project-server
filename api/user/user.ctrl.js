@@ -1,5 +1,5 @@
 
-const User = require('../models/User');
+const User = require('../../models/User');
 const {
     createRekognitionCollection,
     recognizeFace,
@@ -17,7 +17,7 @@ const {
     updateToken,
     sendSMSToProtectors,
     updateUserProfile
-} = require('../lib/index');
+} = require('../../lib/index');
 
 exports.registerUser = async (req, res) => {
 
@@ -55,11 +55,11 @@ exports.registerUser = async (req, res) => {
     }
 };
 
-exports.getFaces = (req, res) => {
-    res.status(200).json({
-        message : "getFaces"
-    })
-};
+// exports.getFaces = (req, res) => {
+//     res.status(200).json({
+//         message : "getFaces"
+//     })
+// };
 
 exports.faceRegister = async (req, res) => {
     const {email, designation, uuid} = req.body;
