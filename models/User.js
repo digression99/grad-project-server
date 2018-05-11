@@ -60,11 +60,6 @@ UserSchema.statics.findByEmail = async function (email) {
         try {
             const user = await User.findOne({email});
             resolve(user);
-            // if (!user) resolve();
-            //
-            //
-            // if (!user) throw new Error('no user found.');
-            // resolve(user);
         } catch (e) {
             console.log('error occred in find by email.');
             console.log(e);
@@ -72,35 +67,35 @@ UserSchema.statics.findByEmail = async function (email) {
         }
     });
 };
-
-UserSchema.statics.getPhoneNumberByEmail = async function (email) {
-    const User = this;
-
-    try {
-        const user = await User.findOne({email});
-        const phoneNumber = user.mobile.phoneNumber;
-        return phoneNumber;
-    } catch (e) {
-        console.log('error occured in get phone number by email');
-        console.log(e);
-        throw new Error(e);
-    }
-};
-
-UserSchema.statics.getProtectorByEmail = async function (email) {
-    const User = this;
-    try {
-        const user = await User.findOne({email});
-        return user;
-        // return user.protector;
-        // const protector = user.protectors;
-        // return protectors;
-    } catch (e) {
-        console.log('error occured in get phone number by email');
-        console.log(e);
-        throw new Error(e);
-    }
-};
+//
+// UserSchema.statics.getPhoneNumberByEmail = async function (email) {
+//     const User = this;
+//
+//     try {
+//         const user = await User.findOne({email});
+//         const phoneNumber = user.mobile.phoneNumber;
+//         return phoneNumber;
+//     } catch (e) {
+//         console.log('error occured in get phone number by email');
+//         console.log(e);
+//         throw new Error(e);
+//     }
+// };
+//
+// UserSchema.statics.getProtectorByEmail = async function (email) {
+//     const User = this;
+//     try {
+//         const user = await User.findOne({email});
+//         return user;
+//         // return user.protector;
+//         // const protector = user.protectors;
+//         // return protectors;
+//     } catch (e) {
+//         console.log('error occured in get phone number by email');
+//         console.log(e);
+//         throw new Error(e);
+//     }
+// };
 
 UserSchema.statics.saveCollectionData = async function (email, designation, faceId, imageId) {
     const User = this;
@@ -116,25 +111,25 @@ UserSchema.statics.saveCollectionData = async function (email, designation, face
         throw new Error(e);
     }
 };
-
-UserSchema.statics.findByEmailAndUpdateClientToken = async function (email, clientToken) {
-    const User = this;
-    try {
-        const user = await User.findOne({email});
-        if (!user) throw new Error("no user found.");
-        await user.update({
-            'mobile.token' : clientToken
-            // $set : {
-            //     mobile : {
-            //         token : clientToken
-            //     }
-            // }
-        });
-    } catch (e) {
-        console.log('error occured in find by email and update client token.');
-        throw new Error(e);
-    }
-};
+//
+// UserSchema.statics.findByEmailAndUpdateClientToken = async function (email, clientToken) {
+//     const User = this;
+//     try {
+//         const user = await User.findOne({email});
+//         if (!user) throw new Error("no user found.");
+//         await user.update({
+//             'mobile.token' : clientToken
+//             // $set : {
+//             //     mobile : {
+//             //         token : clientToken
+//             //     }
+//             // }
+//         });
+//     } catch (e) {
+//         console.log('error occured in find by email and update client token.');
+//         throw new Error(e);
+//     }
+// };
 
 UserSchema.statics.saveS3ImageData = function (email, designation, uuid, result) {
     const User = this;
@@ -160,6 +155,7 @@ UserSchema.statics.saveS3ImageData = function (email, designation, uuid, result)
     });
 };
 
+// for later, if the protectors are several people.
 UserSchema.statics.saveProtectorData = async function (email, phoneNumber, name) {
     const User = this;
     try {
@@ -176,41 +172,43 @@ UserSchema.statics.saveProtectorData = async function (email, phoneNumber, name)
     }
 };
 
-UserSchema.statics.findByEmailAndUpdateUser = async function (email, docs) {
+//
+// UserSchema.statics.findLogData = async function (email) {
+//     const User = this;
+//     const user = User.findOne({email});
+//     const query = {
+//         timestamp : moment().valueOf()
+//     };
+//
+//     const result = await User.find(query).select('S3').exec();
+// }
+
+UserSchema.statics.findByEmailAndUpdateUser = function (email, docs) {
     console.log('enter find by email and update user');
     const User = this;
 
-    try {
-        const query = {email};
-        const update = {$set: {...docs}};
-        console.log('update : ');
-        console.log(JSON.stringify(update, undefined, 2));
-        await User.findOneAndUpdate(query, update).exec();
-    } catch (e) {
-        console.log('error occured in find by email and update user');
-        console.log(e);
-        throw new Error(e);
-    }
+    return new Promise(async (resolve, reject) => {
+        try {
+            const query = {email};
+            const update = {$set: {...docs}};
+            await User.findOneAndUpdate(query, update).exec();
+            resolve();
+        } catch (e) {
+            console.log('error occured in find by email and update user');
+            console.log(e);
+            throw new Error(e);
+        }
+    });
 };
-
-UserSchema.statics.findLogData = async function (email) {
-    const User = this;
-    const user = User.findOne({email});
-    const query = {
-        timestamp : moment().valueOf()
-    };
-
-    const result = await User.find(query).select('S3').exec();
-}
-
-UserSchema.statics.findByEmailAndUpdateRekognition = async function (body) {
-    const User = this;
-    const {email, rekognitionData} = body;
-    const query = {email};
-    const update = {rekognition : rekognitionData};
-
-    return await User.findOneAndUpdate(query, update).exec();
-};
+//
+// UserSchema.statics.findByEmailAndUpdateRekognition = async function (body) {
+//     const User = this;
+//     const {email, rekognitionData} = body;
+//     const query = {email};
+//     const update = {rekognition : rekognitionData};
+//
+//     return await User.findOneAndUpdate(query, update).exec();
+// };
 
 UserSchema.statics.saveUserWithData = function (email, password, token) {
     const User = this;
