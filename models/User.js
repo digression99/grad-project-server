@@ -136,25 +136,28 @@ UserSchema.statics.findByEmailAndUpdateClientToken = async function (email, clie
     }
 };
 
-UserSchema.statics.saveS3ImageData = async function (email, designation, uuid, result) {
+UserSchema.statics.saveS3ImageData = function (email, designation, uuid, result) {
     const User = this;
-    const timestamp = moment().valueOf(); // here, you check the time stamp and save it.
-    const replaced = email.replace(/[@.]/g, '-');
-    const key = `${replaced}/${designation}/${uuid}`;
+    return new Promise(async (resolve, reject) => {
+        const timestamp = moment().valueOf(); // here, you check the time stamp and save it.
+        const replaced = email.replace(/[@.]/g, '-');
+        const key = `${replaced}/${designation}/${uuid}`;
 
-    try {
-        const user = await User.findOne({email});
-        user.S3.push({
-            key,
-            timestamp,
-            result
-        });
-        await user.save();
-    } catch (e) {
-        console.log('error occured in save s3 image data');
-        console.log(e);
-        throw new Error(e);
-    }
+        try {
+            const user = await User.findOne({email});
+            user.S3.push({
+                key,
+                timestamp,
+                result
+            });
+            await user.save();
+            resolve();
+        } catch (e) {
+            console.log('error occured in save s3 image data');
+            console.log(e);
+            reject(e);
+        }
+    });
 };
 
 UserSchema.statics.saveProtectorData = async function (email, phoneNumber, name) {
@@ -209,52 +212,76 @@ UserSchema.statics.findByEmailAndUpdateRekognition = async function (body) {
     return await User.findOneAndUpdate(query, update).exec();
 };
 
-UserSchema.statics.findByEmailAndUpdatePhoneNumber = async function (email, pn) {
+UserSchema.statics.saveUserWithData = function (email, password, token) {
     const User = this;
-    try {
-        console.log('phone number : ', pn);
-        const user = await User.findOne({email});
-        if (!user) throw new Error("no user found.");
-        // console.log('user : ');
-        // console.log(JSON.stringify(user, undefined, 2));
-        await user.update({
-            'mobile.phoneNumber' : pn
-            // $set : {
-            //     mobile : {
-            //         phoneNumber : pn
-            //     }
-            // }
-        });
+    console.log('enter save user with data');
+    return new Promise(async (resolve, reject) => {
+        try {
+            const user = new User({email, password,
+                mobile : {
+                    token
+                }
+            });
 
-        // user.mobile['phoneNumber'] = pn;
-        // user.mobile.phoneNumber = pn;
-
-        //
-        // user.mobile = {
-        //     token : user.mobile.token,
-        //     phoneNumber : pn
-        // };
-        // user.set({
-        //     mobile : {
-        //         phoneNumber : pn
-        //     }
-        // });
-        // user.mobile.phoneNumber = pn;
-        // await user.save();
-        // const query = {email};
-        // const update = {
-        //     mobile : {
-        //         phoneNumber : pn
-        //     }
-        // };
-        // await User.findOneAndUpdate(query, update).exec();
-
-    } catch (e) {
-        console.log('error occured in find by email and update phone number.');
-        console.log(e);
-        throw new Error(e);
-    }
+            await user.save();
+            resolve();
+        } catch (e) {
+            console.log('error in save user with data');
+            console.log(e);
+            reject(e);
+        }
+    });
 };
+
+// UserSchema.statics.saveUserWithData = async function (email, password, token) {
+//     const User = this;
+//     console.log('enter save user with data');
+// };
+//
+// UserSchema.statics.findByEmailAndUpdatePhoneNumber = async function (email, pn) {
+//     const User = this;
+//     try {
+//         console.log('phone number : ', pn);
+//         const user = await User.findOne({email});
+//         if (!user) throw new Error("no user found.");
+//         await user.update({
+//             'mobile.phoneNumber' : pn
+//             // $set : {
+//             //     mobile : {
+//             //         phoneNumber : pn
+//             //     }
+//             // }
+//         });
+//
+//         // user.mobile['phoneNumber'] = pn;
+//         // user.mobile.phoneNumber = pn;
+//
+//         //
+//         // user.mobile = {
+//         //     token : user.mobile.token,
+//         //     phoneNumber : pn
+//         // };
+//         // user.set({
+//         //     mobile : {
+//         //         phoneNumber : pn
+//         //     }
+//         // });
+//         // user.mobile.phoneNumber = pn;
+//         // await user.save();
+//         // const query = {email};
+//         // const update = {
+//         //     mobile : {
+//         //         phoneNumber : pn
+//         //     }
+//         // };
+//         // await User.findOneAndUpdate(query, update).exec();
+//
+//     } catch (e) {
+//         console.log('error occured in find by email and update phone number.');
+//         console.log(e);
+//         throw new Error(e);
+//     }
+// };
 
 // UserSchema.statics.saveS3Image
 
