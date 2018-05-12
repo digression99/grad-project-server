@@ -15,7 +15,7 @@ const app = express();
 const {
     createBlacklistCollection,
     rekognitionListCollections
-} = require('./lib/index');
+} = require('./lib');
 
 // database setting
 require('./config/mongoose');
