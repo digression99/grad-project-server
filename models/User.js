@@ -45,9 +45,10 @@ UserSchema.statics.getLogDataWithDuration = function(email, duration) {
             const data = await User.findOne({email}).select('S3').exec();
             console.log(data);
             if (!data) throw new Error('no user found');
+            const nowTime = moment().valueOf();
 
             resolve(data.S3
-                .filter(val => val.timestamp > duration)
+                .filter(val => nowTime - val.timestamp < duration)
                 .map(dat => ({
                     key : dat.key,
                     timestamp : dat.timestamp,

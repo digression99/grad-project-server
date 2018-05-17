@@ -2,12 +2,9 @@
 const User = require('../../models/User');
 const {
     makeGeoQuery,
-    getLogData,
     addGeoLocationToGeoQuery,
     sendSMSToUser,
-    updatePhoneNumber,
     saveUserToDB,
-    updateUserProfile
 } = require('../../lib/index');
 
 exports.registerUser = async (req, res) => {
@@ -194,12 +191,19 @@ exports.handleEmergency = async (req, res) => {
         // send last location to parent.
         const url = `https://www.google.com/maps/search/?api=1&query=${current_location.latitude},${current_location.longitude}`;
         // await sendSMSToProtectors(email, url);
-        await sendSMSToUser("+821099177190", url);
 
-        res.status(200).json({
-            message : result
-        });
+        if (!req.user.protector) {
+            res.status(400).json({
+                message : "no protector registered."
+            });
+        } else {
+            const protectorPhoneNumber = req.user.protector.phoneNumber;
+            await sendSMSToUser(protectorPhoneNumber, url);
 
+            res.status(200).json({
+                message : result
+            });
+        }
     } catch (e) {
         console.log('error occured.');
         console.log(e);
@@ -274,7 +278,9 @@ exports.updateProfile = async (req, res) => {
             data
         } = req.body;
 
-        await updateUserProfile(email, data);
+        await User.findByEmailAndUpdateUser(email, data);
+
+        // await updateUserProfile(email, data);
 
         res.status(200).json({
             message : "update succeed.",
