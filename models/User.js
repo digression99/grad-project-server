@@ -12,7 +12,8 @@ const UserSchema = new mongoose.Schema({
     },
     S3 : [{
         key : String, // image key. uuid. -> uuid, designation
-        timestamp : Number
+        timestamp : Number,
+        result : String
     }],
     protector : {
         phoneNumber : String,
@@ -45,8 +46,12 @@ UserSchema.statics.getLogDataWithDuration = function(email, duration) {
             console.log(data);
             if (!data) throw new Error('no user found');
 
-            resolve(data.S3.filter(val => val.timestamp > duration)
-                .map(dat => ({ key : dat.key, timestamp : dat.timestamp })));
+            resolve(data.S3
+                .filter(val => val.timestamp > duration)
+                .map(dat => ({
+                    key : dat.key,
+                    timestamp : dat.timestamp,
+                    result : dat.result })));
         } catch (e) {
             console.log('error occured in get log data with duration.');
             console.log(e);

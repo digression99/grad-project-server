@@ -220,7 +220,8 @@ exports.sendLogData = async (req, res) => {
     } = req.body;
 
     try {
-        const result = await getLogData(email, duration);
+        const result = await User.getLogDataWithDuration(email, duration);
+        // const result = await getLogData(email, duration);
         res.status(200).json({
             result
         });

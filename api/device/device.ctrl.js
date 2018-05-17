@@ -9,6 +9,8 @@ const {
     sendMobileNotificationToUser,
 } = require('../../lib');
 
+const User = require('../../models/User');
+
 exports.faceRegister = async (req, res) => {
     const {email, designation, uuid} = req.body;
 
@@ -29,7 +31,9 @@ exports.faceRegister = async (req, res) => {
             const saveCollectionResult = await saveImageToCollectionWithS3(email, designation, id);
             // data save to mongo db.
             await saveCollectionDataToDB(email, designation, saveCollectionResult);
-            await saveS3ImageDataToDB(email, designation, id, 'user');
+
+            await User.saveS3ImageData(email, designation, id, 'user');
+            // await saveS3ImageDataToDB(email, designation, id, 'user');
 
             console.log(`${id} is saved to collection`);
             console.log(saveCollectionResult);
@@ -54,15 +58,16 @@ exports.faceDetect = async (req, res) => {
     // const {email, img} = req.body;
     const {email, designation, uuid} = req.body;
 
-    // const replaced = email.replace(/[@.]/g, '-');
     console.log('face detect entered.');
     console.log('email : ', email);
+    console.log('designation : ', designation);
+    console.log('uuid : ', uuid);
 
     try {
         const result = await recognizeFace(email, designation, uuid);
 
-        console.log("result is : ");
-        console.log(result);
+        // console.log("result is : ");
+        // console.log(result);
 
         switch (result) {
             case 'unknown':
@@ -88,7 +93,8 @@ exports.faceDetect = async (req, res) => {
                     "친구가 방문했습니다.");
                 break;
         }
-        await saveS3ImageDataToDB(email, designation, uuid, result);
+        await User.saveS3ImageData(email, designation, uuid, result);
+        // await saveS3ImageDataToDB(email, designation, uuid, result);
         res.status(200).json({
             message : result,
         });
