@@ -11,7 +11,7 @@ const UserSchema = new mongoose.Schema({
         required : true
     },
     S3 : [{
-        key : String, // image key. uuid.
+        key : String, // image key. uuid. -> uuid, designation
         timestamp : Number
     }],
     protector : {
