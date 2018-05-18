@@ -142,34 +142,33 @@ exports.faceDetect = async (req, res) => {
         // console.log("result is : ");
         // console.log(result);
 
+        let tag = "";
+        let title = "";
+        let message = "";
+
         switch (result) {
-            case 'unknown':
-                await sendMobileNotificationToUser(email,
-                    {result, uuid},
-                    "SHOW_VISITOR",
-                    "외부인 탐지",
-                    "외부인이 방문했습니다.");
-                break;
             case 'user':
             case 'detected':
-                await sendMobileNotificationToUser(email,
-                    {result, uuid},
-                    "SHOW_USER",
-                    "사용자 귀가",
-                    "사용자가 귀가했습니다.");
+                tag = "SHOW_USER";
+                title = "사용자 귀가";
+                message = "사용자가 귀가했습니다.";
                 break;
             case 'friend':
-                await sendMobileNotificationToUser(email,
-                    {result, uuid},
-                    "SHOW_VISITOR",
-                    "친구 방문",
-                    "친구가 방문했습니다.");
+                tag = "SHOW_VISITOR";
+                title = "친구 방문";
+                message = "친구가 방문했습니다.";
                 break;
+            default :
+                tag = "SHOW_VISITOR";
+                title = "외부인 탐지";
+                message = "외부인이 방문했습니다.";
         }
+
+        await sendMobileNotificationToUser(email, {result, uuid}, tag, title, message);
         await User.saveS3ImageData(email, designation, uuid, result);
         // await saveS3ImageDataToDB(email, designation, uuid, result);
         res.status(200).json({
-            message : result,
+            message : result
         });
     } catch (e) {
         console.log('error occured in face detect.');
