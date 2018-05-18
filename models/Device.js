@@ -32,25 +32,25 @@ DeviceSchema.statics.findDeviceById = function (id) {
         }
     });
 };
-
-DeviceSchema.statics.createDevice = function (id, endpoint) {
-    console.log('enter create device');
-    const Device = this;
-    return new Promise(async (resolve, reject) => {
-        try {
-            const device = new Device({
-                deviceId : id,
-                awsEndpoint : endpoint
-            });
-            await device.save();
-            resolve();
-        } catch (e) {
-            console.log('error occured in create device.');
-            console.log(e);
-            reject(e);
-        }
-    });
-};
+//
+// DeviceSchema.statics.createDevice = function (id, endpoint) {
+//     console.log('enter create device');
+//     const Device = this;
+//     return new Promise(async (resolve, reject) => {
+//         try {
+//             const device = new Device({
+//                 deviceId : id,
+//                 awsEndpoint : endpoint
+//             });
+//             await device.save();
+//             resolve();
+//         } catch (e) {
+//             console.log('error occured in create device.');
+//             console.log(e);
+//             reject(e);
+//         }
+//     });
+// };
 
 DeviceSchema.statics.updateDevice = function (id, docs) {
     console.log('enter update device');
