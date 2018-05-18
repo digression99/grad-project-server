@@ -271,12 +271,15 @@ exports.addLocation = async(req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-    // console.log('entered update profile.');
+    console.log('entered update profile.');
     try {
         const {
             email,
             data
         } = req.body;
+
+        console.log('received data : ');
+        console.log(JSON.stringify(data, undefined, 2));
 
         await User.findByEmailAndUpdateUser(email, data);
 
