@@ -10,6 +10,80 @@ const {
 } = require('../../lib');
 
 const User = require('../../models/User');
+const Device = require('../../models/Device');
+
+exports.getUserEmail = async (req, res) => {
+    const {id} = req.body;
+    try {
+        const device = await Device.findDeviceById(id);
+        if (!device) {
+            throw new Error('invalid device id');
+        }
+
+        if (!device.email) {
+            throw new Error('device not registered');
+        }
+
+        res.status(200).json({
+            message : "create device succeed.",
+            email : device.email
+        });
+    } catch (e) {
+        res.status(400).json({
+            message : "get user email error occured.",
+            error : e
+        });
+    }
+};
+
+exports.createDevice = async (req, res) => {
+    const {id, endpoint} = req.body;
+
+    try {
+        const device = new Device({
+            deviceId : id,
+            awsEndpoint : endpoint
+        });
+        await device.save();
+        res.status(200).json({
+            message : "create device succeed."
+        });
+    } catch (e) {
+        res.status(400).json({
+            message : "create device error occured.",
+            error : e
+        });
+    }
+};
+
+exports.registerDevice = async (req, res) => {
+    const {email, deviceId} = req.body;
+    console.log('enter register device.');
+    try {
+        if (!deviceId) throw new Error("no device id provided.");
+        const device = await Device.findDeviceById(deviceId);
+        if (!device) throw new Error("invalid device id");
+
+        const user = await User.findByEmail(email);
+        if (!user) throw new Error("user not registered.");
+
+        user.deviceId = deviceId;
+        device.email = email;
+
+        await user.save();
+        await device.save();
+
+        res.status(200).json({
+            message : "register device succeed.",
+            email
+        });
+    } catch (e) {
+        res.status(400).json({
+            message : "error occured.",
+            error : e
+        });
+    }
+};
 
 exports.faceRegister = async (req, res) => {
     const {email, designation, uuid} = req.body;

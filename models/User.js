@@ -31,9 +31,7 @@ const UserSchema = new mongoose.Schema({
             // required : true
         },
     },
-    device : {
-        id : String,
-    }
+    deviceId : String
 });
 
 UserSchema.statics.getLogDataWithDuration = function(email, duration) {
