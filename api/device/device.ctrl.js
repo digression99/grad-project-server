@@ -24,7 +24,7 @@ exports.getUserEmail = async (req, res) => {
             throw new Error('device not registered');
         }
         res.status(200).json({
-            message : "create device succeed.",
+            message : "get user email succeed.",
             email : device.email
         });
     } catch (e) {
