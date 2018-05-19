@@ -139,9 +139,6 @@ exports.faceDetect = async (req, res) => {
     try {
         const result = await recognizeFace(email, designation, uuid);
 
-        // console.log("result is : ");
-        // console.log(result);
-
         let tag = "";
         let title = "";
         let message = "";

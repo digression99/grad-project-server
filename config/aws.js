@@ -13,9 +13,6 @@ AWS.config.update({
     region : AWS_REGION
 });
 
-// app client id : 7fn9nf1kr0eu99cbcjpqmpm8me
-// pool id :  us-east-1_s0cj8LZzv
-
 // AWS.config.credentials = new AWS.CognitoIdentityCredentials({
 //     IdentityPoolId: 'IDENTITY_POOL_ID',
 //     IdentityId: 'IDENTITY_ID_RETURNED_FROM_YOUR_PROVIDER',
