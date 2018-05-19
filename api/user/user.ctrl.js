@@ -4,7 +4,9 @@ const {
     makeGeoQuery,
     addGeoLocationToGeoQuery,
     sendSMSToUser,
-    sendMobileNotificationToUser
+    sendMobileNotificationToUser,
+    getLocationFromAddress,
+    addGeoLocationToGeoQuery
 } = require('../../lib/index');
 
 exports.registerUser = async (req, res) => {
@@ -223,6 +225,30 @@ exports.handleAcceptHelp = async (req, res) => {
         });
     } catch (e) {
         console.log('error occured in handle accept help.');
+        console.log(e);
+        res.status(400).json({
+            error : e
+        });
+    }
+};
+
+exports.addressCheck = async (req, res) => {
+    console.log('enter address check.');
+    try {
+        const {
+            address,
+            email
+        } = req.body;
+
+        const res = await getLocationFromAddress(address);
+        await addGeoLocationToGeoQuery(email, {longitude : res.lng, latitude : res.lat});
+
+        res.status(200).json({
+            message : "address check succeed.",
+            email
+        });
+    } catch (e) {
+        console.log('error occured in address check.');
         console.log(e);
         res.status(400).json({
             error : e
