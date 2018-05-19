@@ -4,6 +4,7 @@ const {
     makeGeoQuery,
     addGeoLocationToGeoQuery,
     sendSMSToUser,
+    sendMobileNotificationToUser
 } = require('../../lib/index');
 
 exports.registerUser = async (req, res) => {
@@ -196,6 +197,32 @@ exports.updateProfile = async (req, res) => {
         });
     } catch (e) {
         console.log('error occured in update profile.');
+        console.log(e);
+        res.status(400).json({
+            error : e
+        });
+    }
+};
+
+exports.handleAcceptHelp = async (req, res) => {
+    console.log('enter handle accept help');
+    try {
+        const {
+            requestedEmail,
+            acceptedEmail
+        } = req.body;
+
+        await sendMobileNotificationToUser(requestedEmail,
+            {acceptedEmail},
+            "SHOW_ACCEPT_HELP",
+            "도움 수락",
+            "도움 요청을 수락하였습니다.");
+
+        res.status(200).json({
+            message : "handle accept help succeed."
+        });
+    } catch (e) {
+        console.log('error occured in handle accept help.');
         console.log(e);
         res.status(400).json({
             error : e

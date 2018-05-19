@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema({
         phoneNumber : String,
         name : String
     },
-    rekognition : [{ // for deletion.
+    rekognition : [{ // for .
         faceId : String,
         imageId : String,
         designation : String
