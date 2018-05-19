@@ -26,6 +26,7 @@ const UserSchema = new mongoose.Schema({
     }],
     mobile : {
         phoneNumber : String,
+        countryCode : String,
         token : {
             type : String,
             // required : true
@@ -153,7 +154,7 @@ UserSchema.statics.findByEmailAndUpdateUser = function (email, docs) {
     });
 };
 
-UserSchema.statics.createUser = function (email, password, token) {
+UserSchema.statics.createUser = function (email, password, token, countryCode) {
     const User = this;
     console.log('enter save user with data');
     return new Promise(async (resolve, reject) => {
@@ -161,7 +162,8 @@ UserSchema.statics.createUser = function (email, password, token) {
             const user = new User({email, password,
                 mobile : {
                     token
-                }
+                },
+                countryCode
             });
 
             await user.save();

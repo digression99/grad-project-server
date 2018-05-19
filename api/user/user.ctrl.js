@@ -8,7 +8,7 @@ const {
 
 exports.registerUser = async (req, res) => {
 
-    const {email, password, token} = req.body;
+    const {email, password, token, countryCode} = req.body;
     console.log("data found.");
     console.log("email : ", email);
     console.log("password : ", password);
@@ -24,7 +24,7 @@ exports.registerUser = async (req, res) => {
         }
         if (!email || !password || !token) throw new Error('no data accepted.');
 
-        await User.createUser(email, password, token);
+        await User.createUser(email, password, token, countryCode);
 
         console.log('create user succeed.');
 
@@ -97,7 +97,10 @@ exports.handleEmergency = async (req, res) => {
             });
         } else {
             const protectorPhoneNumber = req.user.protector.phoneNumber;
-            await sendSMSToUser(protectorPhoneNumber, url);
+
+            // should fix later. country code not matched.
+            const protectorCountryCode = req.user.mobile.countryCode;
+            await sendSMSToUser(protectorPhoneNumber, url, protectorCountryCode);
 
             res.status(200).json({
                 message : result
