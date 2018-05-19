@@ -106,7 +106,6 @@ exports.faceRegister = async (req, res) => {
             await saveCollectionDataToDB(email, designation, saveCollectionResult);
 
             await User.saveS3ImageData(email, designation, id, 'user');
-            // await saveS3ImageDataToDB(email, designation, id, 'user');
 
             console.log(`${id} is saved to collection`);
             console.log(saveCollectionResult);
@@ -155,6 +154,11 @@ exports.faceDetect = async (req, res) => {
                 title = "친구 방문";
                 message = "친구가 방문했습니다.";
                 break;
+            case 'blacklist':
+                tag = "SHOW_BLACKLIST";
+                title = "위험인물 감지";
+                message = "위험 인물이 감지되었습니다.";
+                break;
             default :
                 tag = "SHOW_VISITOR";
                 title = "외부인 탐지";
@@ -163,7 +167,6 @@ exports.faceDetect = async (req, res) => {
 
         await sendMobileNotificationToUser(email, {result, uuid}, tag, title, message);
         await User.saveS3ImageData(email, designation, uuid, result);
-        // await saveS3ImageDataToDB(email, designation, uuid, result);
         res.status(200).json({
             message : result
         });

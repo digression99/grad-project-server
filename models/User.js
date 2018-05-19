@@ -34,7 +34,7 @@ const UserSchema = new mongoose.Schema({
     deviceId : String
 });
 
-UserSchema.statics.getLogDataWithDuration = function(email, duration) {
+UserSchema.statics.getLogDataWithDuration = function(email, duration) { // duration : milli sec.
     const User = this;
     console.log('enter get log data with duration.');
 

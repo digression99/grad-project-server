@@ -188,8 +188,6 @@ exports.updateProfile = async (req, res) => {
 
         await User.findByEmailAndUpdateUser(email, data);
 
-        // await updateUserProfile(email, data);
-
         res.status(200).json({
             message : "update succeed.",
             email
