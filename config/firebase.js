@@ -12,7 +12,8 @@ const {
 
     FIREBASE_ADMIN_PROJECT_ID,
     FIREBASE_ADMIN_CLIENT_EMAIL,
-    FIREBASE_ADMIN_PRIVATE_KEY
+    FIREBASE_ADMIN_PRIVATE_KEY,
+    ENV_STATUS
 } = require('../lib/constants');
 
 const config = {
@@ -28,7 +29,7 @@ admin.initializeApp({
     credential: admin.credential.cert({
         projectId: FIREBASE_ADMIN_PROJECT_ID,
         clientEmail: FIREBASE_ADMIN_CLIENT_EMAIL,
-        privateKey: JSON.parse(FIREBASE_ADMIN_PRIVATE_KEY)
+        privateKey : ENV_STATUS === 'dev' ? FIREBASE_ADMIN_PRIVATE_KEY : JSON.parse(FIREBASE_ADMIN_PRIVATE_KEY)
     }),
     databaseURL: FIREBASE_DATABASE_URL
 });
