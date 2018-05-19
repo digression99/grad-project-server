@@ -21,7 +21,7 @@ AWS.config.update({
 //     }
 // });
 
-console.log('in aws config, endpoint is : ', process.env.AWS_IOT_ENDPOINT);
+// console.log('in aws config, endpoint is : ', process.env.AWS_IOT_ENDPOINT);
 
 // Create an S3 client
 const S3 = new AWS.S3();
