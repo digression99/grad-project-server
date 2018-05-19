@@ -4,7 +4,6 @@ const {
     recognizeFace,
     saveImageToCollectionWithS3,
     changeImagePermissionInS3,
-    saveS3ImageDataToDB,
     saveCollectionDataToDB,
     sendMobileNotificationToUser,
 } = require('../../lib');
@@ -17,12 +16,11 @@ exports.getUserEmail = async (req, res) => {
     try {
         const device = await Device.findDeviceById(id);
         if (!device) {
-            throw new Error('invalid device id');
+            res.status(400).json({message : "invalid device id."});
+        } else if (!device.email) {
+            res.status(400).json({message : "device not registered."});
         }
 
-        if (!device.email) {
-            throw new Error('device not registered');
-        }
         res.status(200).json({
             message : "get user email succeed.",
             email : device.email
@@ -39,13 +37,10 @@ exports.createDevice = async (req, res) => {
     const {id, endpoint} = req.body;
 
     try {
-        const device = new Device({
-            deviceId : id,
-            awsEndpoint : endpoint
-        });
-        await device.save();
+        await Device.createDevice(id, endpoint);
         res.status(200).json({
-            message : "create device succeed."
+            message : "create device succeed.",
+            id
         });
     } catch (e) {
         res.status(400).json({
@@ -55,7 +50,7 @@ exports.createDevice = async (req, res) => {
     }
 };
 
-exports.registerDevice = async (req, res) => {
+exports.registerDeviceWithUser = async (req, res) => {
     const {email, deviceId} = req.body;
     console.log('enter register device.');
     try {

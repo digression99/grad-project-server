@@ -4,7 +4,6 @@ const {
     makeGeoQuery,
     addGeoLocationToGeoQuery,
     sendSMSToUser,
-    saveUserToDB,
 } = require('../../lib/index');
 
 exports.registerUser = async (req, res) => {
@@ -18,17 +17,16 @@ exports.registerUser = async (req, res) => {
     try {
         const user = await User.findByEmail(email);
         if (user) {
-            res.status(200).json({
+            res.status(400).json({
                 message : "user already exists",
                 email
             });
-            // throw new Error('user already exists.');
         }
         if (!email || !password || !token) throw new Error('no data accepted.');
 
-        await saveUserToDB(email, password, token);
+        await User.createUser(email, password, token);
 
-        console.log('save user to db succeed.');
+        console.log('create user succeed.');
 
         res.status(200).json({
             message : "registerUser succeed.",
@@ -73,17 +71,18 @@ exports.getProfile = async (req, res) => {
 };
 
 exports.handleEmergency = async (req, res) => {
+
+    console.log('enter handle emergency.');
     try {
         // get data from req body.
         const {email, current_location, locations} = req.body;
 
         console.log("email is : ", email);
-        console.log('current location : ');
-        console.log(current_location);
+        // console.log('current location : ');
+        // console.log(current_location);
+        // console.log('locations : ');
+        // console.log(locations);
 
-        console.log('locations : ');
-        console.log(locations);
-        // make query. this to library func.
         const result = await makeGeoQuery(email, current_location);
         console.log('geo query result is : ');
         console.log(result);
@@ -200,104 +199,3 @@ exports.updateProfile = async (req, res) => {
         });
     }
 };
-
-
-// exports.getFaces = (req, res) => {
-//     res.status(200).json({
-//         message : "getFaces"
-//     })
-// };
-//
-// exports.faceRegister = async (req, res) => {
-//     const {email, designation, uuid} = req.body;
-//
-//     console.log('face register entered.');
-//     console.log("email is : ", email);
-//
-//     try {
-//
-//         if (!email) throw new Error("no email provided.");
-//         if (!designation) throw new Error("no designation provided.");
-//         if (!uuid) throw new Error("no uuid provided.");
-//
-//         await createRekognitionCollection(email);
-//
-//         for (let id of uuid) {
-//             // await
-//             await changeImagePermissionInS3(email, designation, id);
-//             const saveCollectionResult = await saveImageToCollectionWithS3(email, designation, id);
-//             // data save to mongo db.
-//             await saveCollectionDataToDB(email, designation, saveCollectionResult);
-//             await saveS3ImageDataToDB(email, designation, id, 'user');
-//
-//             console.log(`${id} is saved to collection`);
-//             console.log(saveCollectionResult);
-//         }
-//
-//         console.log('face register succeed.');
-//
-//         res.status(200).json({
-//             message : "face register succeed."
-//         });
-//     } catch (e) {
-//         console.log('error occured in face register.');
-//         console.log(e);
-//         res.status(400).json({
-//             message : "error occured.",
-//             error : e
-//         });
-//     }
-// };
-
-//
-// exports.faceDetect = async (req, res) => {
-//     // const {email, img} = req.body;
-//     const {email, designation, uuid} = req.body;
-//
-//     // const replaced = email.replace(/[@.]/g, '-');
-//     console.log('face detect entered.');
-//     console.log('email : ', email);
-//
-//     try {
-//         const result = await recognizeFace(email, designation, uuid);
-//
-//         console.log("result is : ");
-//         console.log(result);
-//
-//         switch (result) {
-//             case 'unknown':
-//                 await sendMobileNotificationToUser(email,
-//                     {result, uuid},
-//                     "SHOW_VISITOR",
-//                     "외부인 탐지",
-//                     "외부인이 방문했습니다.");
-//                 break;
-//             case 'user':
-//             case 'detected':
-//                 await sendMobileNotificationToUser(email,
-//                     {result, uuid},
-//                     "SHOW_USER",
-//                     "사용자 귀가",
-//                     "사용자가 귀가했습니다.");
-//                 break;
-//             case 'friend':
-//                 await sendMobileNotificationToUser(email,
-//                     {result, uuid},
-//                     "SHOW_VISITOR",
-//                     "친구 방문",
-//                     "친구가 방문했습니다.");
-//                 break;
-//         }
-//         await saveS3ImageDataToDB(email, designation, uuid, result);
-//         res.status(200).json({
-//             message : result,
-//         });
-//     } catch (e) {
-//         console.log('error occured in face detect.');
-//         console.log(e);
-//         res.status(400).json({
-//             message : "error occured in face detect.",
-//             error : e
-//         });
-//     }
-// };

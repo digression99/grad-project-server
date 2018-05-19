@@ -5,7 +5,7 @@ const deviceCtrl = require('./device.ctrl');
 const authenticate = require('../../lib/middleware/authenticate');
 
 device.post('/device-create', deviceCtrl.createDevice);
-device.post('/device-register', deviceCtrl.registerDevice);
+device.post('/device-register', deviceCtrl.registerDeviceWithUser);
 device.post('/get-user-email', deviceCtrl.getUserEmail);
 
 device.use(authenticate);

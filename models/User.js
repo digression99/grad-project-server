@@ -153,7 +153,7 @@ UserSchema.statics.findByEmailAndUpdateUser = function (email, docs) {
     });
 };
 
-UserSchema.statics.saveUserWithData = function (email, password, token) {
+UserSchema.statics.createUser = function (email, password, token) {
     const User = this;
     console.log('enter save user with data');
     return new Promise(async (resolve, reject) => {
@@ -173,6 +173,8 @@ UserSchema.statics.saveUserWithData = function (email, password, token) {
         }
     });
 };
+
+
 //
 // UserSchema.statics.findByEmailAndUpdateClientToken = async function (email, clientToken) {
 //     const User = this;
