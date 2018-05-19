@@ -28,7 +28,7 @@ admin.initializeApp({
     credential: admin.credential.cert({
         projectId: FIREBASE_ADMIN_PROJECT_ID,
         clientEmail: FIREBASE_ADMIN_CLIENT_EMAIL,
-        privateKey: FIREBASE_ADMIN_PRIVATE_KEY
+        privateKey: JSON.parse(FIREBASE_ADMIN_PRIVATE_KEY)
     }),
     databaseURL: FIREBASE_DATABASE_URL
 });
