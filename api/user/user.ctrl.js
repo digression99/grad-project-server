@@ -5,8 +5,7 @@ const {
     addGeoLocationToGeoQuery,
     sendSMSToUser,
     sendMobileNotificationToUser,
-    getLocationFromAddress,
-    addGeoLocationToGeoQuery
+    getLocationFromAddress
 } = require('../../lib/index');
 
 exports.registerUser = async (req, res) => {
