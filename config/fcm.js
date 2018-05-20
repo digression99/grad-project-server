@@ -1,3 +1,5 @@
+// soon be obsolete.
+
 const FCM = require('fcm-node');
 
 const {
