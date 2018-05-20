@@ -8,6 +8,35 @@ const {
     getLocationFromAddress
 } = require('../../lib/index');
 
+exports.userLogin = async (req, res) => {
+    console.log('enter user login.');
+    try {
+        const {
+            email,
+            token
+        } = req.body;
+
+        const data = {
+            mobile : {
+                token
+            }
+        };
+
+        // refresh token.
+        await User.findByEmailAndUpdateUser(email, data);
+        res.status(200).json({
+            message : "user login succeed."
+        });
+    } catch (e) {
+        console.error('error occured in user login');
+        console.error(e);
+        res.status(400).json({
+            message : "user login succeed.",
+            error : e
+        });
+    }
+};
+
 exports.registerUser = async (req, res) => {
 
     const {email, password, token, countryCode} = req.body;

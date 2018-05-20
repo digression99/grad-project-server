@@ -11,6 +11,8 @@ user.post('/register', userCtrl.registerUser);
 
 user.use(authenticate);
 
+user.post('/login', userCtrl.userLogin);
+
 user.post('/profile', userCtrl.getProfile);
 user.post('/emergency', userCtrl.handleEmergency);
 user.post('/logs', userCtrl.sendLogData);
