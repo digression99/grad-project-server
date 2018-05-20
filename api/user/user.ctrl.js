@@ -255,5 +255,21 @@ exports.addressCheck = async (req, res) => {
     }
 };
 
-// exports.fcmTest = async (req, res) => {
-// };
+exports.fcmTest = async (req, res) => {
+    console.log('fcm test');
+    const {email} = req.body;
+
+    try {
+        await sendMobileNotificationToUser(email, {testData : "TEST DATA"}, SHOW_EMERGENCY, "title", "message");
+
+        res.status(200).json({
+            message : "fcm test.",
+            email
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(400).json({
+            error : e
+        });
+    }
+};
