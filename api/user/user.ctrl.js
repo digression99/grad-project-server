@@ -306,3 +306,28 @@ exports.fcmTest = async (req, res) => {
         });
     }
 };
+
+exports.handleTimerFinish = async (req, res) => {
+    console.log('enter handle timer finish.');
+    try {
+        const user = await User.findByEmail(req.user);
+        if (!user) throw new Error('no user found.');
+
+        if (!user.protector) throw new Error('protector not registered.');
+
+        const phoneNumber = user.protector.phoneNumber;
+        const message = "등록된 사용자가 귀가하지 않았습니다.";
+        await sendSMSToUser(phoneNumber, message);
+
+        res.status(200).json({
+            message : "handle timer finish succeed.",
+            email : req.user
+        });
+    } catch (e) {
+        console.log('error occured in handle timer finish.');
+        console.log(e);
+        res.status(400).json({
+            error : e
+        });
+    }
+}

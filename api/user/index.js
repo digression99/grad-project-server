@@ -19,6 +19,7 @@ user.post('/logs', userCtrl.sendLogData);
 user.post('/add-location', userCtrl.addLocation);
 user.post('/accept-help', userCtrl.handleAcceptHelp);
 user.post('/address-check', userCtrl.addressCheck);
+user.post('/timer-finished', userCtrl.handleTimerFinish);
 
 // update request.
 user.put('/profile', userCtrl.updateProfile);
