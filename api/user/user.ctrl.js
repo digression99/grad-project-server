@@ -289,10 +289,10 @@ exports.fcmTest = async (req, res) => {
     const {email} = req.body;
 
     try {
-        await sendMobileNotificationToUser(email, {testData : "TEST DATA"}, 'SHOW_EMERGENCY', "title", "message");
+        await sendMobileNotificationToUser(email, {testData : "TEST DATA"}, 'SHOW_USER', "title", "message");
 
         res.status(200).json({
-            message : "fcm test.",
+            message : "fcm test succeed.",
             email
         });
     } catch (e) {
