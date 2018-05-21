@@ -89,7 +89,9 @@ exports.getProfile = async (req, res) => {
             },
             mobile : {
                 phoneNumber : user.mobile.phoneNumber
-            }
+            },
+            deviceId : user.deviceId,
+            address : user.address
         };
 
         res.status(200).json(data);
@@ -270,6 +272,8 @@ exports.addressCheck = async (req, res) => {
 
         const result = await getLocationFromAddress(address);
         await addGeoLocationToGeoQuery(email, {longitude : result.lng, latitude : result.lat});
+
+        User.findByEmailAndUpdateUser(email, {address});
 
         res.status(200).json({
             message : "address check succeed.",
