@@ -283,22 +283,22 @@ exports.addressCheck = async (req, res) => {
         });
     }
 };
-//
-// exports.fcmTest = async (req, res) => {
-//     console.log('fcm test');
-//     const {email} = req.body;
-//
-//     try {
-//         await sendMobileNotificationToUser(email, {testData : "TEST DATA"}, 'SHOW_USER', "title", "message");
-//
-//         res.status(200).json({
-//             message : "fcm test succeed.",
-//             email
-//         });
-//     } catch (e) {
-//         console.log(e);
-//         res.status(400).json({
-//             error : e
-//         });
-//     }
-// };
+
+exports.fcmTest = async (req, res) => {
+    console.log('fcm test');
+    const {email} = req.body;
+
+    try {
+        await sendMobileNotificationToUser(email, {testData : "TEST DATA"}, 'SHOW_USER', "title", "message");
+
+        res.status(200).json({
+            message : "fcm test succeed.",
+            email
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(400).json({
+            error : e
+        });
+    }
+};
