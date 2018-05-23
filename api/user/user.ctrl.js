@@ -330,4 +330,4 @@ exports.handleTimerFinish = async (req, res) => {
             error : e
         });
     }
-}
+};

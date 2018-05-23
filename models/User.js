@@ -48,6 +48,7 @@ UserSchema.statics.getLogDataWithDuration = function(email, duration) { // durat
             const nowTime = moment().valueOf();
 
             resolve(data.S3
+                .filter(val => new RegExp('(detected)').test(val.key))
                 .filter(val => nowTime - val.timestamp < duration)
                 .map(dat => ({
                     key : dat.key,
