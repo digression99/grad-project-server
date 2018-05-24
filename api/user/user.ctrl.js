@@ -129,6 +129,9 @@ exports.handleEmergency = async (req, res) => {
                 message : "no protector registered."
             });
         } else {
+            console.log('req.user is : ');
+            console.log(JSON.stringify(req.user));
+
             const protectorPhoneNumber = req.user.protector.phoneNumber;
 
             // should fix later. country code not matched.
