@@ -135,8 +135,8 @@ exports.handleEmergency = async (req, res) => {
             const protectorPhoneNumber = req.user.protector.phoneNumber;
 
             // should fix later. country code not matched.
-            const protectorCountryCode = req.user.mobile.countryCode;
-            await sendSMSToUser(protectorPhoneNumber, url, protectorCountryCode);
+            // const protectorCountryCode = req.user.mobile.countryCode;
+            await sendSMSToUser(protectorPhoneNumber, url, "+82");
 
             res.status(200).json({
                 message : result
