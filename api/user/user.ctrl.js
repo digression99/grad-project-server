@@ -334,3 +334,20 @@ exports.handleTimerFinish = async (req, res) => {
         });
     }
 };
+
+exports.deleteProfile = async (req, res) => {
+    try {
+
+        console.log('successfully got http request.');
+
+        res.status(200).json({
+            message : "delete profile!"
+        });
+    } catch (e) {
+        console.log('error occured in delete profile.');
+        console.log(e);
+        res.status(400).json({
+            error : e
+        });
+    }
+}

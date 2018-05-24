@@ -27,6 +27,10 @@ user.put('/profile', userCtrl.updateProfile);
 // test
 user.post('/fcm-test', userCtrl.fcmTest);
 
+// delete.
+
+user.delete('/profile', userCtrl.deleteProfile);
+
 // user.put('/profile/token', userCtrl.updateToken);
 // user.post('/face-register', userCtrl.faceRegister); // to device
 // user.post('/face-detect', userCtrl.faceDetect); // to device
