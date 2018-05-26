@@ -53,6 +53,11 @@ app.get('*', (req, res) => {
         // search blacklist collection
         const isBlacklistMade = result.includes("blacklist-collection");
 
+        // if blacklist collection exists in test environment, then remove it and make it again.
+        if (process.env.ENV_STATUS && process.env.ENV_TATUS === "dev") {
+            console.log('development status.');
+        }
+
         if (!isBlacklistMade) {
             await createBlacklistCollection();
         }
