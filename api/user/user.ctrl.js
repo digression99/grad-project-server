@@ -314,7 +314,7 @@ exports.addressCheck = async (req, res) => {
 exports.handleTimerFinish = async (req, res) => {
     console.log('enter handle timer finish.');
     try {
-        const user = await User.findByEmail(req.user);
+        const user = await User.findByEmail(req.user.email);
         if (!user) throw new Error('no user found.');
 
         if (!user.protector) throw new Error('protector not registered.');
