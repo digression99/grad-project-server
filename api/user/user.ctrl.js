@@ -7,7 +7,9 @@ const {
     sendMobileNotificationToUser,
     getLocationFromAddress,
     removeGeoLocation,
-    saveImageToBlacklistCollectionWithS3
+    saveImageToBlacklistCollectionWithS3,
+    deleteImageInS3,
+    saveBlackListImageInS3
 } = require('../../lib/index');
 
 exports.userLogin = async (req, res) => {
@@ -386,6 +388,8 @@ exports.registerBlackList = async (req, res) => {
         } = req.body;
 
         await saveImageToBlacklistCollectionWithS3(req.user.email, 'detected', uuid);
+        await deleteImageInS3(req.user.email, 'detected', uuid);
+        await saveBlackListImageInS3(uuid);
 
         res.status(200).json({
             message : "register blacklist succeed."
