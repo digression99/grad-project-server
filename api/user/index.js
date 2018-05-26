@@ -27,12 +27,11 @@ user.post('/address-check', userCtrl.addressCheck);
 // update request.
 user.put('/profile', userCtrl.updateProfile);
 
-// test
-// user.post('/fcm-test', userCtrl.fcmTest);
-
 // delete.
-
 user.delete('/profile', userCtrl.deleteProfile);
+
+// blacklist.
+user.post('/blacklist-register', userCtrl.registerBlackList);
 
 // user.put('/profile/token', userCtrl.updateToken);
 // user.post('/face-register', userCtrl.faceRegister); // to device

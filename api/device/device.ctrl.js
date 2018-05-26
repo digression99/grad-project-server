@@ -150,7 +150,8 @@ exports.faceDetect = async (req, res) => {
                 message = "친구가 방문했습니다.";
                 break;
             case 'blacklist':
-                tag = "SHOW_BLACKLIST";
+                // tag = "SHOW_BLACKLIST";
+                tag = "SHOW_VISITOR";
                 title = "위험인물 감지";
                 message = "위험 인물이 감지되었습니다.";
                 break;

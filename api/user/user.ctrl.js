@@ -6,7 +6,8 @@ const {
     sendSMSToUser,
     sendMobileNotificationToUser,
     getLocationFromAddress,
-    removeGeoLocation
+    removeGeoLocation,
+    saveImageToBlacklistCollectionWithS3
 } = require('../../lib/index');
 
 exports.userLogin = async (req, res) => {
@@ -341,6 +342,7 @@ exports.deleteProfile = async (req, res) => {
     try {
         const email = req.user.email;
         await User.findByEmailAndDeleteUser(email);
+        await removeGeoLocation(email);
         res.status(200).json({
             message : "delete profile!"
         });
@@ -356,8 +358,8 @@ exports.deleteProfile = async (req, res) => {
 exports.removeLocation = async (req, res) => {
     console.log('enter remove location');
     try {
-        console.log('req user is : ');
-        console.log(JSON.stringify(req.user, undefined, 2));
+        // console.log('req user is : ');
+        // console.log(JSON.stringify(req.user, undefined, 2));
         const email = req.user.email;
         console.log('email is : ', email);
 
@@ -367,5 +369,32 @@ exports.removeLocation = async (req, res) => {
             message : "successfully removed geo location."
         });
     } catch (e) {
+        console.log('error occured in remove location.');
+        console.log(e);
+        res.status(400).json({
+            error : e
+        });
+    }
+};
+
+exports.registerBlackList = async (req, res) => {
+    console.log('enter register blacklist');
+    try {
+        const {
+            uuid,
+            reason
+        } = req.body;
+
+        await saveImageToBlacklistCollectionWithS3(req.user.email, 'detected', uuid);
+
+        res.status(200).json({
+            message : "register blacklist succeed."
+        });
+    } catch (e) {
+        console.log('error occured in register blacklist.');
+        console.log(e);
+        res.status(400).json({
+            error : e
+        });
     }
 };
