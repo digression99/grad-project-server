@@ -388,6 +388,7 @@ exports.registerBlackList = async (req, res) => {
         } = req.body;
 
         if (!key) throw new Error("no key found.");
+        console.log('key is : ', key);
 
         // console.log
 
