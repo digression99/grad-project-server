@@ -387,6 +387,10 @@ exports.registerBlackList = async (req, res) => {
             reason
         } = req.body;
 
+        if (!key) throw new Error("no key found.");
+
+        // console.log
+
         await saveImageToBlacklistCollectionWithS3(key);
         await deleteImageInS3(key);
         await saveBlackListImageInS3(key);
