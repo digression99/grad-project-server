@@ -156,6 +156,22 @@ UserSchema.statics.findByEmailAndUpdateUser = function (email, docs) {
     });
 };
 
+UserSchema.statics.findByEmailAndDeleteUser = function (email) {
+    const User = this;
+    console.log('enter find by email and delete user');
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            await User.deleteOne({email});
+            resolve();
+        } catch (e) {
+            console.log('error occured in find by email and delete user.');
+            console.log(e);
+            reject(e);
+        }
+    })
+}
+
 UserSchema.statics.createUser = function (email, password, token, countryCode) {
     const User = this;
     console.log('enter save user with data');

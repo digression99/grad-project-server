@@ -276,7 +276,7 @@ exports.addressCheck = async (req, res) => {
         const result = await getLocationFromAddress(address);
         await addGeoLocationToGeoQuery(email, {longitude : result.lng, latitude : result.lat});
 
-        User.findByEmailAndUpdateUser(email, {address});
+        await User.findByEmailAndUpdateUser(email, {address});
 
         res.status(200).json({
             message : "address check succeed.",
@@ -291,24 +291,24 @@ exports.addressCheck = async (req, res) => {
     }
 };
 
-exports.fcmTest = async (req, res) => {
-    console.log('fcm test');
-    const {email} = req.body;
-
-    try {
-        await sendMobileNotificationToUser(email, {testData : "TEST DATA"}, 'SHOW_USER', "title", "message");
-
-        res.status(200).json({
-            message : "fcm test succeed.",
-            email
-        });
-    } catch (e) {
-        console.log(e);
-        res.status(400).json({
-            error : e
-        });
-    }
-};
+// exports.fcmTest = async (req, res) => {
+//     console.log('fcm test');
+//     const {email} = req.body;
+//
+//     try {
+//         await sendMobileNotificationToUser(email, {testData : "TEST DATA"}, 'SHOW_USER', "title", "message");
+//
+//         res.status(200).json({
+//             message : "fcm test succeed.",
+//             email
+//         });
+//     } catch (e) {
+//         console.log(e);
+//         res.status(400).json({
+//             error : e
+//         });
+//     }
+// };
 
 exports.handleTimerFinish = async (req, res) => {
     console.log('enter handle timer finish.');
@@ -336,10 +336,12 @@ exports.handleTimerFinish = async (req, res) => {
 };
 
 exports.deleteProfile = async (req, res) => {
+    console.log('enter delete profile.');
     try {
-
-        console.log('successfully got http request.');
-
+        const {
+            email
+        } = req.body;
+        await User.findByEmailAndDeleteUser(email);
         res.status(200).json({
             message : "delete profile!"
         });
@@ -350,4 +352,20 @@ exports.deleteProfile = async (req, res) => {
             error : e
         });
     }
-}
+};
+
+exports.removeLocation = async (req, res) => {
+    try {
+        // const {
+        //     email
+        // } = req.body;
+
+        const email = req.user.email;
+        await removeGeoLocation(email);
+        console.log('successfully removed geo location.');
+        res.status(200).json({
+            message : "successfully removed geo location."
+        });
+    } catch (e) {
+    }
+};

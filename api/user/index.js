@@ -16,16 +16,19 @@ user.post('/login', userCtrl.userLogin);
 user.post('/profile', userCtrl.getProfile);
 user.post('/emergency', userCtrl.handleEmergency);
 user.post('/logs', userCtrl.sendLogData);
-user.post('/add-location', userCtrl.addLocation);
 user.post('/accept-help', userCtrl.handleAcceptHelp);
-user.post('/address-check', userCtrl.addressCheck);
 user.post('/timer-finished', userCtrl.handleTimerFinish);
+
+// location.
+user.post('/remove-location', userCtrl.removeLocation);
+user.post('/add-location', userCtrl.addLocation);
+user.post('/address-check', userCtrl.addressCheck);
 
 // update request.
 user.put('/profile', userCtrl.updateProfile);
 
 // test
-user.post('/fcm-test', userCtrl.fcmTest);
+// user.post('/fcm-test', userCtrl.fcmTest);
 
 // delete.
 
