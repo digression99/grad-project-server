@@ -360,8 +360,6 @@ exports.deleteProfile = async (req, res) => {
 exports.removeLocation = async (req, res) => {
     console.log('enter remove location');
     try {
-        // console.log('req user is : ');
-        // console.log(JSON.stringify(req.user, undefined, 2));
         const email = req.user.email;
         console.log('email is : ', email);
 
