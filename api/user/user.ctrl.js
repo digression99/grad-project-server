@@ -339,9 +339,7 @@ exports.handleTimerFinish = async (req, res) => {
 exports.deleteProfile = async (req, res) => {
     console.log('enter delete profile.');
     try {
-        const {
-            email
-        } = req.body;
+        const email = req.user.email;
         await User.findByEmailAndDeleteUser(email);
         res.status(200).json({
             message : "delete profile!"
@@ -358,10 +356,8 @@ exports.deleteProfile = async (req, res) => {
 exports.removeLocation = async (req, res) => {
     console.log('enter remove location');
     try {
-        // const {
-        //     email
-        // } = req.body;
-
+        console.log('req user is : ');
+        console.log(JSON.stringify(req.user, undefined, 2));
         const email = req.user.email;
         console.log('email is : ', email);
 
