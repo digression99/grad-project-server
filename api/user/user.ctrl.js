@@ -381,13 +381,13 @@ exports.registerBlackList = async (req, res) => {
     console.log('enter register blacklist');
     try {
         const {
-            uuid,
+            key,
             reason
         } = req.body;
 
-        await saveImageToBlacklistCollectionWithS3(req.user.email, 'detected', uuid);
-        await deleteImageInS3(req.user.email, 'detected', uuid);
-        await saveBlackListImageInS3(uuid);
+        await saveImageToBlacklistCollectionWithS3(key);
+        await deleteImageInS3(key);
+        await saveBlackListImageInS3(key);
 
         res.status(200).json({
             message : "register blacklist succeed."
