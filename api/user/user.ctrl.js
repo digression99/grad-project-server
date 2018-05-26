@@ -9,7 +9,8 @@ const {
     removeGeoLocation,
     saveImageToBlacklistCollectionWithS3,
     deleteImageInS3,
-    saveBlackListImageInS3
+    saveBlackListImageInS3,
+    deleteUserCollection
 } = require('../../lib/index');
 
 exports.userLogin = async (req, res) => {
@@ -345,6 +346,7 @@ exports.deleteProfile = async (req, res) => {
         const email = req.user.email;
         await User.findByEmailAndDeleteUser(email);
         await removeGeoLocation(email);
+        await deleteUserCollection(email);
         res.status(200).json({
             message : "delete profile!"
         });
