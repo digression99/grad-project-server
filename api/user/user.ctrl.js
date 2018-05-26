@@ -130,6 +130,7 @@ exports.handleEmergency = async (req, res) => {
         // await sendSMSToProtectors(email, url);
 
         if (!req.user.protector) {
+            console.log(`${req.user} protector not registered.`);
             res.status(400).json({
                 message : "no protector registered."
             });
