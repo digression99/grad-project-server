@@ -355,12 +355,15 @@ exports.deleteProfile = async (req, res) => {
 };
 
 exports.removeLocation = async (req, res) => {
+    console.log('enter remove location');
     try {
         // const {
         //     email
         // } = req.body;
 
         const email = req.user.email;
+        console.log('email is : ', email);
+
         await removeGeoLocation(email);
         console.log('successfully removed geo location.');
         res.status(200).json({
