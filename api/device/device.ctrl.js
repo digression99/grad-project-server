@@ -136,6 +136,7 @@ exports.faceDetect = async (req, res) => {
         let tag = "";
         let title = "";
         let message = "";
+        let data = {result, uuid};
 
         switch (result) {
             case 'user':
@@ -154,6 +155,7 @@ exports.faceDetect = async (req, res) => {
                 tag = "SHOW_VISITOR";
                 title = "위험인물 감지";
                 message = "위험 인물이 감지되었습니다.";
+                data['reason'] = "도둑질을 했음";
                 break;
             default :
                 tag = "SHOW_VISITOR";
@@ -161,7 +163,7 @@ exports.faceDetect = async (req, res) => {
                 message = "외부인이 방문했습니다.";
         }
 
-        await sendMobileNotificationToUser(email, {result, uuid}, tag, title, message);
+        await sendMobileNotificationToUser(email, data, tag, title, message);
         await User.saveS3ImageData(email, designation, uuid, result);
         res.status(200).json({
             message : result
