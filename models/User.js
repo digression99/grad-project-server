@@ -145,20 +145,29 @@ UserSchema.statics.findByEmailAndUpdateUser = function (email, docs) {
     return new Promise(async (resolve, reject) => {
         try {
             const query = {email};
-            const updateDocument = {};
+            const user = await User.findByEmail(query);
 
             if (docs.password && docs.password.length > 1)
-                updateDocument.password = docs.password;
+                user.password = docs.password;
             if (docs.protector) {
-                updateDocument.protector = {};
                 if (docs.protector.phoneNumber && docs.protector.phoneNumber.length > 1)
-                    updateDocument.protector.phoneNumber = docs.protector.phoneNumber;
+                    user.protector.phoneNumber = docs.protector.phoneNumber;
                 if (docs.protector.name && docs.protector.name.length > 1)
-                    updateDocument.protector.name = docs.protector.name;
+                    user.protector.name = docs.protector.name;
             }
+            if (docs.address && docs.address.length > 1)
+                user.address = docs.address;
+            if (docs.mobile) {
+                if (docs.mobile.token && docs.mobile.token.length > 1) {
+                    user.mobile.token = docs.mobile.token;
+                }
+            }
+            if (docs.deviceId && docs.deviceId.length > 1) user.deviceId = docs.deviceId;
 
-            const update = {$set: {...updateDocument}};
-            await User.findOneAndUpdate(query, update).exec();
+            await user.save();
+            // const update = {$set: {...updateDocument}};
+            // await User.findOneAndUpdate(query, update).exec();
+
             resolve();
         } catch (e) {
             console.log('error occured in find by email and update user');

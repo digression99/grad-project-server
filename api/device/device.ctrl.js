@@ -64,8 +64,13 @@ exports.registerDeviceWithUser = async (req, res) => {
         user.deviceId = deviceId;
         device.email = email;
 
-        await user.save();
+        await User.findByEmailAndUpdateUser(email, {deviceId});
+        await Device.updateDevice(deviceId, {email});
+
         await device.save();
+
+
+
 
         res.status(200).json({
             message : "register device succeed.",

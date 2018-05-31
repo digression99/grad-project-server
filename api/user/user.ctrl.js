@@ -22,14 +22,8 @@ exports.userLogin = async (req, res) => {
             token
         } = req.body;
 
-        const data = {
-            mobile : {
-                token
-            }
-        };
-
         // refresh token.
-        await User.findByEmailAndUpdateUser(email, data);
+        await User.findByEmailAndUpdateUser(email, {mobile : {token}});
         res.status(200).json({
             message : "user login succeed."
         });
@@ -117,10 +111,6 @@ exports.handleEmergency = async (req, res) => {
         const {email, current_location, locations} = req.body;
 
         console.log("email is : ", email);
-        // console.log('current location : ');
-        // console.log(current_location);
-        // console.log('locations : ');
-        // console.log(locations);
 
         const result = await makeGeoQuery(email, current_location);
         console.log('geo query result is : ');
