@@ -145,7 +145,15 @@ UserSchema.statics.findByEmailAndUpdateUser = function (email, docs) {
     return new Promise(async (resolve, reject) => {
         try {
             const query = {email};
-            const update = {$set: {...docs}};
+            const updateDocument = {};
+            if (docs.password && docs.password.length > 1)
+                updateDocument.password = docs.password;
+            if (docs.protector && docs.protector.phoneNumber && docs.protector.phoneNumber.length > 1)
+                updateDocument.protector.phoneNumber = docs.protector.phoneNumber;
+            if (docs.protector && docs.protector.name && docs.protector.name.length > 1)
+                updateDocument.protector.name = docs.protector.name;
+
+            const update = {$set: {...updateDocument}};
             await User.findOneAndUpdate(query, update).exec();
             resolve();
         } catch (e) {

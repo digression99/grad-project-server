@@ -231,6 +231,13 @@ exports.updateProfile = async (req, res) => {
         console.log('received data : ');
         console.log(JSON.stringify(data, undefined, 2));
 
+        const updateData = {
+
+
+        };
+
+
+
         await User.findByEmailAndUpdateUser(email, data);
 
         res.status(200).json({
