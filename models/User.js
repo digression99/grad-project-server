@@ -146,12 +146,19 @@ UserSchema.statics.findByEmailAndUpdateUser = function (email, docs) {
         try {
             const query = {email};
             const updateDocument = {};
+
+            console.log('docs : ');
+            console.log(JSON.stringify(docs, undefined, 2));
+
             if (docs.password && docs.password.length > 1)
                 updateDocument.password = docs.password;
             if (docs.protector && docs.protector.phoneNumber && docs.protector.phoneNumber.length > 1)
                 updateDocument.protector.phoneNumber = docs.protector.phoneNumber;
             if (docs.protector && docs.protector.name && docs.protector.name.length > 1)
                 updateDocument.protector.name = docs.protector.name;
+
+            console.log('update document : ');
+            console.log(JSON.stringify(updateDocument, undefined, 2));
 
             const update = {$set: {...updateDocument}};
             await User.findOneAndUpdate(query, update).exec();
