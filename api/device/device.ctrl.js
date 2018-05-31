@@ -102,6 +102,8 @@ exports.faceRegister = async (req, res) => {
             // await
             await changeImagePermissionInS3(email, designation, id);
             const saveCollectionResult = await saveImageToCollectionWithS3(email, designation, id);
+            console.log('save collection result : ');
+            console.log(JSON.stringify(saveCollectionResult, undefined, 2));
             // data save to mongo db.
             await saveCollectionDataToDB(email, designation, saveCollectionResult);
 
