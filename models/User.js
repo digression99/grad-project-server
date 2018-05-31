@@ -144,8 +144,7 @@ UserSchema.statics.findByEmailAndUpdateUser = function (email, docs) {
 
     return new Promise(async (resolve, reject) => {
         try {
-            const query = {email};
-            const user = await User.findByEmail(query);
+            const user = await User.findByEmail(email);
 
             if (docs.password && docs.password.length > 1)
                 user.password = docs.password;
